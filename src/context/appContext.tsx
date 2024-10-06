@@ -1,25 +1,28 @@
 import { createContext, useContext, useState, ReactNode, useMemo } from 'react';
 
 interface AppContext {
-  n: number;
-  customTask: number[] | undefined;
+  backCount: number;
+  taskSet: number[];
+  visibleTime: number; // ms
+  waitTime: number; // ms
 }
 
 interface Action {
   set: (newValue: AppContext) => void;
 }
 
-const AppContextValue = createContext<AppContext>({
-  n: 0,
-  customTask: undefined,
-});
+const initialAppContext = {
+  backCount: 0,
+  taskSet: [1, 2, 3],
+  visibleTime: 500,
+  waitTime: 1000,
+};
+
+const AppContextValue = createContext<AppContext>(initialAppContext);
 const contextAction = createContext<Action>({ set: () => {} });
 
 export function AppContextProvider({ children }: { children: ReactNode }) {
-  const [appContext, setAppContext] = useState<AppContext>({
-    n: 0,
-    customTask: undefined,
-  });
+  const [appContext, setAppContext] = useState<AppContext>(initialAppContext);
 
   const action: Action = useMemo(
     () => ({

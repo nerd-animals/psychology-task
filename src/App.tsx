@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { AppContextProvider } from './context/setting';
+import { AppContextProvider } from './context/appContext';
 import Home from './page/home';
 import Task from './page/task';
 import PreTask from './page/preTask';

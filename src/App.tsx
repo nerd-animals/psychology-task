@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { SettingContextProvider } from './context/setting';
+import { AppContextProvider } from './context/setting';
 import home from './page/home';
 import task from './page/task';
 import preTask from './page/preTask';
@@ -9,7 +9,7 @@ import notFound from './page/notFound';
 
 function App() {
   return (
-    <SettingContextProvider>
+    <AppContextProvider>
       <BrowserRouter basename={process.env.PUBLIC_URL}>
         <Routes>
           <Route path="/" element={home()} />
@@ -20,7 +20,7 @@ function App() {
           <Route path="*" element={notFound()} />
         </Routes>
       </BrowserRouter>
-    </SettingContextProvider>
+    </AppContextProvider>
   );
 }
 

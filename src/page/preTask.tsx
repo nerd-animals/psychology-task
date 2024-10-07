@@ -4,7 +4,9 @@ export default function preTask() {
   return (
     <>
       <div>this is pre-task page</div>
-      <Link to="/task">do Task</Link>
+      <Link to="/task" reloadDocument>
+        do Task
+      </Link>
     </>
   );
 }

@@ -1,50 +1,111 @@
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { useAppContext } from '../context/appContext';
+import { Result } from '../context/subjectContext';
 
 export default function task() {
-  const { backCount, taskSet, waitTime, visibleTime } = useAppContext();
-  const [value, setValue] = useState<number>(-1);
+  const { taskSet, waitTime, visibleTime, sessionChangeTime } =
+    useAppContext().currentSetting;
+  const [sessionIndex, setSessionIndex] = useState<number>(0);
   const [index, setIndex] = useState<number>(0);
-  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-  const [initialTime, setInitialTime] = useState<Date>(new Date());
-  const [isVisible, setIsVisible] = useState<boolean>(true);
-  const [isFinished, setIsFinished] = useState<boolean>(false);
-  const waitTimer = useRef<number>();
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+  const [isSessionChanging, setIsSessionChanging] = useState<boolean>(false);
   const visibleTimer = useRef<number>();
+  const sessionChangeTimer = useRef<number>();
+  const isSubmittedRef = useRef<string | undefined>(undefined);
+  const initialTimeRef = useRef<number>(0);
+  const durationRef = useRef<number>(0);
+  const resultListRef = useRef<Result[]>([]);
+  const navigate = useNavigate();
+  const getDisplayedValue = () => {
+    if (isSessionChanging) {
+      return 'session changing';
+    }
+    return isVisible ? taskSet[sessionIndex].at(index) : '+';
+  };
+
+  const saveResult = () => {
+    if (index === 0) return;
+
+    const result: Result = {
+      sessionIndex,
+      number: taskSet[sessionIndex][index - 1],
+      submitCode: isSubmittedRef.current,
+      duration: durationRef.current,
+    };
+    resultListRef.current.push(result);
+  };
 
   useEffect(() => {
-    if (index === taskSet?.length) {
-      setIsFinished(true);
+    if (index >= taskSet[sessionIndex].length) {
       return undefined;
     }
 
-    setValue(taskSet.at(index) || -1);
-    setIsVisible(true);
-
     visibleTimer.current = window.setTimeout(() => {
-      setIsVisible(false);
-      // +일때 응답을 받는지에 따라서 결정
-      // if (index === taskSet.length - 1) {
-      //   setIsFinished(true);
-      // }
-    }, visibleTime);
+      saveResult();
 
-    waitTimer.current = window.setTimeout(() => {
-      setIndex((prev) => prev + 1);
+      setIsVisible(true);
+      initialTimeRef.current = window.performance.now();
+      isSubmittedRef.current = undefined;
+      durationRef.current = -1;
+
+      visibleTimer.current = window.setTimeout(() => {
+        setIsVisible(false);
+        setIndex((prev) => prev + 1);
+      }, visibleTime);
     }, waitTime);
 
     return () => {
       window.clearTimeout(visibleTimer.current);
-      window.clearTimeout(waitTimer.current);
     };
   }, [index]);
+
+  // session change
+  useEffect(() => {
+    if (index < taskSet[sessionIndex].length) {
+      return undefined;
+    }
+
+    if (sessionIndex < taskSet.length - 1) {
+      sessionChangeTimer.current = window.setTimeout(() => {
+        setIsSessionChanging(true);
+        saveResult();
+        sessionChangeTimer.current = window.setTimeout(() => {
+          setIsSessionChanging(false);
+          setSessionIndex((prev) => prev + 1);
+          setIndex(0);
+        }, sessionChangeTime);
+      }, waitTime);
+    } else {
+      sessionChangeTimer.current = window.setTimeout(() => {
+        saveResult();
+        navigate('/post-task');
+      }, waitTime);
+    }
+
+    return () => window.clearTimeout(sessionChangeTimer.current);
+  }, [index]);
+
+  // key event
+  useEffect(() => {
+    const onKeydown = (e: KeyboardEvent) => {
+      e.preventDefault();
+      if (isSubmittedRef.current || isSessionChanging) return; //
+
+      if (e.code === 'ControlLeft' || e.code === 'ControlRight') {
+        isSubmittedRef.current = e.code;
+        durationRef.current = window.performance.now() - initialTimeRef.current;
+      }
+    };
+    window.addEventListener('keydown', onKeydown);
+
+    return () => window.removeEventListener('keydown', onKeydown);
+  }, [isSessionChanging]);
 
   return (
     <>
       <div>this is task page</div>
-      <div>{isVisible ? value : '+'}</div>
-      {isFinished ? <Link to="/post-task">end</Link> : undefined}
+      <div>{getDisplayedValue()}</div>
     </>
   );
 }

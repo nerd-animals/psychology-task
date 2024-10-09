@@ -1,11 +1,17 @@
-import { useNavigate } from 'react-router-dom';
-import { useEffect, useRef, useState } from 'react';
-import { useAppContext } from '../context/appContext';
-import { Result } from '../context/subjectContext';
+import React, { useEffect, useRef, useState } from 'react';
+import { Result, AppSetting, AppStep, Subject } from '../lib/type';
 
-export default function task() {
-  const { taskSet, waitTime, visibleTime, sessionChangeTime } =
-    useAppContext().currentSetting;
+export default function task({
+  appStep,
+  appSetting,
+  setAppStep,
+}: {
+  appStep: AppStep;
+  appSetting: AppSetting;
+  setAppStep: React.Dispatch<React.SetStateAction<AppStep>>;
+  setSubject: React.Dispatch<React.SetStateAction<Subject>>;
+}) {
+  const { taskSet, waitTime, visibleTime, sessionChangeTime } = appSetting;
   const [sessionIndex, setSessionIndex] = useState<number>(0);
   const [index, setIndex] = useState<number>(0);
   const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -16,7 +22,7 @@ export default function task() {
   const initialTimeRef = useRef<number>(0);
   const durationRef = useRef<number>(0);
   const resultListRef = useRef<Result[]>([]);
-  const navigate = useNavigate();
+
   const getDisplayedValue = () => {
     if (isSessionChanging) {
       return 'session changing';
@@ -79,7 +85,11 @@ export default function task() {
     } else {
       sessionChangeTimer.current = window.setTimeout(() => {
         saveResult();
-        navigate('/post-task');
+        if (appStep === 'trial') {
+          setAppStep('pre-task');
+        } else if (appStep === 'task') {
+          setAppStep('post-task');
+        }
       }, waitTime);
     }
 

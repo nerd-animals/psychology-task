@@ -1,116 +1,68 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import { Result, AppSetting, AppStep, Subject } from '../lib/type';
+import TaskBox from '../component/taskBox';
 
 export default function task({
   appSetting,
+  addResult,
   setAppStep,
 }: {
   appSetting: AppSetting;
+  addResult: (result: Result) => void;
   setAppStep: React.Dispatch<React.SetStateAction<AppStep>>;
-  setSubject: React.Dispatch<React.SetStateAction<Subject>>;
 }) {
-  const { taskSet, waitTime, visibleTime, sessionChangeTime } = appSetting;
+  const { taskList, initializeTime, waitTime, visibleTime, sessionChangeTime } =
+    appSetting;
+  const [isInitailized, setIsInitailized] = useState<boolean>(false);
+  const [isFinished, setIsFinished] = useState<boolean>(false);
   const [sessionIndex, setSessionIndex] = useState<number>(0);
-  const [index, setIndex] = useState<number>(0);
-  const [isVisible, setIsVisible] = useState<boolean>(false);
-  const [isSessionChanging, setIsSessionChanging] = useState<boolean>(false);
-  const visibleTimer = useRef<number>();
-  const sessionChangeTimer = useRef<number>();
-  const isSubmittedRef = useRef<string | undefined>(undefined);
-  const initialTimeRef = useRef<number>(0);
-  const durationRef = useRef<number>(0);
-  const resultListRef = useRef<Result[]>([]);
+  const initialTimer = useRef<number>();
+  const sessionTimer = useRef<number>();
 
-  const getDisplayedValue = () => {
-    if (isSessionChanging) {
-      return 'session changing';
-    }
-    return isVisible ? taskSet[sessionIndex].at(index) : '+';
+  const save = (value: number, submittedCode: string, duration: number) => {
+    addResult({ sessionIndex, value, submittedCode, duration });
   };
 
-  const saveResult = () => {
-    if (index === 0) return;
-
-    const result: Result = {
-      sessionIndex,
-      number: taskSet[sessionIndex][index - 1],
-      submitCode: isSubmittedRef.current,
-      duration: durationRef.current,
-    };
-    resultListRef.current.push(result);
-  };
-
+  // initialize
   useEffect(() => {
-    if (index >= taskSet[sessionIndex].length) {
-      return undefined;
-    }
+    initialTimer.current = window.setTimeout(
+      () => setIsInitailized(true),
+      initializeTime
+    );
 
-    visibleTimer.current = window.setTimeout(() => {
-      saveResult();
+    return () => window.clearTimeout(initialTimer.current);
+  }, []);
 
-      setIsVisible(true);
-      initialTimeRef.current = window.performance.now();
-      isSubmittedRef.current = undefined;
-      durationRef.current = -1;
-
-      visibleTimer.current = window.setTimeout(() => {
-        setIsVisible(false);
-        setIndex((prev) => prev + 1);
-      }, visibleTime);
-    }, waitTime);
-
-    return () => {
-      window.clearTimeout(visibleTimer.current);
-    };
-  }, [index]);
-
-  // session change
+  // change session
   useEffect(() => {
-    if (index < taskSet[sessionIndex].length) {
-      return undefined;
-    }
+    if (isFinished === false) return undefined;
 
-    if (sessionIndex < taskSet.length - 1) {
-      sessionChangeTimer.current = window.setTimeout(() => {
-        setIsSessionChanging(true);
-        saveResult();
-        sessionChangeTimer.current = window.setTimeout(() => {
-          setIsSessionChanging(false);
-          setSessionIndex((prev) => prev + 1);
-          setIndex(0);
-        }, sessionChangeTime);
-      }, waitTime);
+    if (sessionIndex < taskList.length - 1) {
+      sessionTimer.current = window.setTimeout(() => {
+        setSessionIndex((prev) => prev + 1);
+        setIsFinished(false);
+      }, sessionChangeTime);
     } else {
-      sessionChangeTimer.current = window.setTimeout(() => {
-        saveResult();
-        setAppStep('pre-task');
-        setAppStep('post-task');
-      }, waitTime);
+      setAppStep('post-task');
     }
 
-    return () => window.clearTimeout(sessionChangeTimer.current);
-  }, [index]);
-
-  // key event
-  useEffect(() => {
-    const onKeydown = (e: KeyboardEvent) => {
-      e.preventDefault();
-      if (isSubmittedRef.current || isSessionChanging) return; //
-
-      if (e.code === 'ControlLeft' || e.code === 'ControlRight') {
-        isSubmittedRef.current = e.code;
-        durationRef.current = window.performance.now() - initialTimeRef.current;
-      }
-    };
-    window.addEventListener('keydown', onKeydown);
-
-    return () => window.removeEventListener('keydown', onKeydown);
-  }, [isSessionChanging]);
+    return () => window.clearTimeout(sessionTimer.current);
+  }, [isFinished]);
 
   return (
     <>
-      <div>this is task page</div>
-      <div>{getDisplayedValue()}</div>
+      <div>main task</div>
+      {isInitailized === false || isFinished ? (
+        <div>session 변경 중입니다</div>
+      ) : (
+        <TaskBox
+          taskList={taskList[sessionIndex]}
+          waitTime={waitTime}
+          visibleTime={visibleTime}
+          setIsFinished={setIsFinished}
+          save={save}
+        />
+      )}
     </>
   );
 }

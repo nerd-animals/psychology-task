@@ -8,39 +8,38 @@ import PreTask from './step/preTask';
 import Task from './step/task';
 import PostTask from './step/postTask';
 import Setting from './step/setting';
-import { AppSetting, AppStep, Subject } from './lib/type';
+import { AppSetting, AppStep, Subject, Result } from './lib/type';
 
 const INITIAL_APP_SETTING: AppSetting = {
   backCount: 2,
-  taskSet: [
+  trialList: [1, 2, 3],
+  taskList: [
     [1, 2, 3],
     [4, 5, 6],
   ],
+  initializeTime: 3000,
   visibleTime: 300,
   waitTime: 1000,
-  sessionChangeTime: 5000,
+  sessionChangeTime: 3000,
 };
 
 const INITIAL_SUBJECT: Subject = {
   subjectId: '',
   subjectLabel: '',
-  result: [],
+  date: new Date(),
 };
 
 function App() {
   const [appStep, setAppStep] = useState<AppStep>('home');
   const [appSetting, setAppSetting] = useState<AppSetting>(INITIAL_APP_SETTING);
   const [subject, setSubject] = useState<Subject>(INITIAL_SUBJECT);
-  const date = useRef<Date>(new Date());
-
-  useEffect(() => {
-    if (appStep !== 'task') return;
-    date.current = new Date();
-  }, [appStep]);
+  const resultRef = useRef<Result[]>([]);
 
   return (
     <main>
-      <div>Home 버튼 & Settings 버튼 </div>
+      <button type="button" onClick={() => setAppStep('home')}>
+        home
+      </button>
       <div>
         {appStep === 'home' && <Home setAppStep={setAppStep} />}
         {appStep === 'setup' && (
@@ -59,12 +58,19 @@ function App() {
         {appStep === 'task' && (
           <Task
             appSetting={appSetting}
+            addResult={(result: Result) => resultRef.current.push(result)}
             setAppStep={setAppStep}
-            setSubject={setSubject}
           />
         )}
         {appStep === 'post-task' && (
-          <PostTask startDate={date} setAppStep={setAppStep} />
+          <PostTask
+            subject={subject}
+            resultList={resultRef.current}
+            clearResultList={() => {
+              resultRef.current = [];
+            }}
+            setAppStep={setAppStep}
+          />
         )}
         {appStep === 'setting' && (
           <Setting

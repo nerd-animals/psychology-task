@@ -1,14 +1,25 @@
-import React from 'react';
-import { AppStep } from '../lib/type';
+import React, { useEffect, useState } from 'react';
+import { AppStep, Subject, Result } from '../lib/type';
 
 export default function postTask({
-  startDate,
+  subject,
+  resultList,
+  clearResultList,
   setAppStep,
 }: {
-  startDate: React.ForwardedRef<Date>;
+  subject: Subject;
+  resultList: Result[];
+  clearResultList: () => void;
   setAppStep: React.Dispatch<React.SetStateAction<AppStep>>;
 }) {
-  console.log(startDate);
+  const [isFinished, setIsFinished] = useState<boolean>(false);
+
+  useEffect(() => {
+    console.log(resultList);
+    clearResultList();
+    console.log(resultList);
+  }, []);
+
   return (
     <>
       <div>this is post-task page</div>

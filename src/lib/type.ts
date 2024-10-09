@@ -11,7 +11,9 @@ export type AppStep =
 
 export interface AppSetting {
   backCount: number;
-  taskSet: number[][];
+  trialList: number[];
+  taskList: number[][];
+  initializeTime: number; // ms
   visibleTime: number; // ms
   waitTime: number; // ms
   sessionChangeTime: number; // ms
@@ -19,13 +21,13 @@ export interface AppSetting {
 
 export interface Result {
   sessionIndex: number;
-  number: number;
-  submitCode: string | undefined;
+  value: number;
+  submittedCode: string | undefined;
   duration: number;
 }
 
 export interface Subject {
   subjectId: string; // uuid
   subjectLabel: string; // anything
-  result: Result[];
+  date: Date;
 }

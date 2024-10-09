@@ -15,7 +15,7 @@ export default function setup({
     setSubject({
       subjectId: uuid(),
       subjectLabel: inputRef.current,
-      result: [],
+      date: new Date(),
     });
   };
 

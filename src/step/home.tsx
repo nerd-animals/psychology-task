@@ -12,6 +12,9 @@ export default function home({
       <button type="button" onClick={() => setAppStep('setup')}>
         start
       </button>
+      <button type="button" onClick={() => setAppStep('setting')}>
+        setting
+      </button>
     </>
   );
 }

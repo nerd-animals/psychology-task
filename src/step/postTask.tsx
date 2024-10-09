@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { CSVDownload, CSVLink } from 'react-csv';
 import { AppStep, Subject, Result } from '../lib/type';
 
 export default function postTask({
@@ -23,6 +24,7 @@ export default function postTask({
   return (
     <>
       <div>this is post-task page</div>
+      <CSVDownload data={resultList} target="_blank" />
       <button type="button" onClick={() => setAppStep('home')}>
         go Home
       </button>

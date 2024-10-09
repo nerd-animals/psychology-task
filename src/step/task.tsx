@@ -2,11 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Result, AppSetting, AppStep, Subject } from '../lib/type';
 
 export default function task({
-  appStep,
   appSetting,
   setAppStep,
 }: {
-  appStep: AppStep;
   appSetting: AppSetting;
   setAppStep: React.Dispatch<React.SetStateAction<AppStep>>;
   setSubject: React.Dispatch<React.SetStateAction<Subject>>;
@@ -85,11 +83,8 @@ export default function task({
     } else {
       sessionChangeTimer.current = window.setTimeout(() => {
         saveResult();
-        if (appStep === 'trial') {
-          setAppStep('pre-task');
-        } else if (appStep === 'task') {
-          setAppStep('post-task');
-        }
+        setAppStep('pre-task');
+        setAppStep('post-task');
       }, waitTime);
     }
 

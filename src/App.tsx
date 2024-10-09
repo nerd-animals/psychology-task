@@ -3,6 +3,7 @@ import Home from './step/home';
 import Setup from './step/setup';
 import StandBy from './step/standBy';
 import Explain from './step/explain';
+import Trial from './step/trial';
 import PreTask from './step/preTask';
 import Task from './step/task';
 import PostTask from './step/postTask';
@@ -52,17 +53,11 @@ function App() {
           <Explain appSetting={appSetting} setAppStep={setAppStep} />
         )}
         {appStep === 'trial' && (
-          <Task
-            appStep="trial"
-            appSetting={appSetting}
-            setAppStep={setAppStep}
-            setSubject={setSubject}
-          />
+          <Trial appSetting={appSetting} setAppStep={setAppStep} />
         )}
         {appStep === 'pre-task' && <PreTask setAppStep={setAppStep} />}
         {appStep === 'task' && (
           <Task
-            appStep="task"
             appSetting={appSetting}
             setAppStep={setAppStep}
             setSubject={setSubject}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import TaskBox from '../component/taskBox';
-import { AppSetting, AppStep, Subject } from '../lib/type';
+import { AppSetting, AppStep } from '../lib/type';
+import Initialization from '../component/initialization';
 
 export default function trial({
   appSetting,
@@ -9,13 +10,17 @@ export default function trial({
   appSetting: AppSetting;
   setAppStep: React.Dispatch<React.SetStateAction<AppStep>>;
 }) {
-  const { trialList, initializeTime, waitTime, visibleTime } = appSetting;
+  const { trialSession, initializeTime, waitTime, visibleTime } = appSetting;
   const [isFinished, setIsFinished] = useState<boolean>(false);
   const [isInitailized, setIsInitailized] = useState<boolean>(false);
   const initialTimer = useRef<number>();
 
   // initialize
   useEffect(() => {
+    if (trialSession.taskList.length === 0) {
+      setAppStep('pre-task');
+    }
+
     initialTimer.current = window.setTimeout(
       () => setIsInitailized(true),
       initializeTime
@@ -32,18 +37,14 @@ export default function trial({
 
   return (
     <>
-      <div>예시</div>
-      {isInitailized === false || isFinished ? (
-        <div>끝</div>
-      ) : (
+      {isInitailized === false && <Initialization />}
+      {isInitailized && (
         <TaskBox
-          taskList={trialList}
+          taskList={trialSession.taskList}
           waitTime={waitTime}
           visibleTime={visibleTime}
           setIsFinished={setIsFinished}
-          save={(value: number, submittedCode: string, duration: number) =>
-            console.log('saved!')
-          }
+          save={() => {}}
         />
       )}
     </>

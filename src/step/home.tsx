@@ -1,20 +1,35 @@
 import React from 'react';
-import { AppStep } from '../lib/type';
+import { AppStep, AppSetting } from '../lib/type';
+import Button from '../component/button';
 
 export default function home({
+  appSetting,
   setAppStep,
 }: {
+  appSetting: AppSetting;
   setAppStep: React.Dispatch<React.SetStateAction<AppStep>>;
 }) {
+  const isReady = () => {
+    if (appSetting.sessionList.length === 0) return false;
+    if (appSetting.sessionList.some((session) => session.taskList.length === 0))
+      return false;
+    return true;
+  };
+
   return (
     <>
-      <div>과제 제목 & 설명 링크</div>
-      <button type="button" onClick={() => setAppStep('setup')}>
-        start
-      </button>
-      <button type="button" onClick={() => setAppStep('setting')}>
-        setting
-      </button>
+      <div>N-back Task</div>
+      <Button
+        label="Start"
+        onClick={() => {
+          if (isReady()) {
+            setAppStep('setup');
+          } else {
+            window.alert('설정을 완료해주세요.');
+          }
+        }}
+      />
+      <Button label="Setting" onClick={() => setAppStep('setting')} />
     </>
   );
 }

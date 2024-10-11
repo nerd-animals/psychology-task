@@ -1,19 +1,20 @@
 import React, { ChangeEvent, useRef } from 'react';
-import { v4 as uuid } from 'uuid';
 import { AppStep, Subject } from '../lib/type';
+import Button from '../component/button';
 
 export default function setup({
   setSubject,
   setAppStep,
 }: {
-  setSubject: React.Dispatch<React.SetStateAction<Subject>>;
+  setSubject: (subject: Subject) => void;
   setAppStep: React.Dispatch<React.SetStateAction<AppStep>>;
 }) {
   const inputRef = useRef<string>('');
 
   const initializeSubject = () => {
+    // todo: inputRef가 비어있을 때, toast ui로 경고 띄우기
+
     setSubject({
-      subjectId: uuid(),
       subjectLabel: inputRef.current,
       date: new Date(),
     });
@@ -21,23 +22,24 @@ export default function setup({
 
   return (
     <>
-      <div>사용자 설정 화면</div>
-      <input
-        type="text"
-        placeholder="Enter Subject Name"
-        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-          inputRef.current = e.target.value;
-        }}
-      />
-      <button
-        type="button"
+      <div>피실험자의 이름 또는 ID를 입력해주세요.</div>
+      <div>
+        <input
+          className="m-1"
+          type="text"
+          placeholder="Enter Subject Name"
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            inputRef.current = e.target.value;
+          }}
+        />
+      </div>
+      <Button
+        label="설정 완료"
         onClick={() => {
           initializeSubject();
           setAppStep('stand-by');
         }}
-      >
-        complete
-      </button>
+      />
     </>
   );
 }

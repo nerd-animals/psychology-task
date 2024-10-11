@@ -1,6 +1,8 @@
-import React, { forwardRef, useEffect, useRef, useState } from 'react';
-import { Result, AppSetting, AppStep, Subject } from '../lib/type';
+import React, { useEffect, useRef, useState } from 'react';
+import { Result, AppSetting, AppStep } from '../lib/type';
 import TaskBox from '../component/taskBox';
+import Initialization from '../component/initialization';
+import Interlude from '../component/interlude';
 
 export default function task({
   appSetting,
@@ -11,16 +13,36 @@ export default function task({
   addResult: (result: Result) => void;
   setAppStep: React.Dispatch<React.SetStateAction<AppStep>>;
 }) {
-  const { taskList, initializeTime, waitTime, visibleTime, sessionChangeTime } =
-    appSetting;
+  const {
+    sessionList,
+    initializeTime,
+    waitTime,
+    visibleTime,
+    sessionChangeTime,
+  } = appSetting;
   const [isInitailized, setIsInitailized] = useState<boolean>(false);
   const [isFinished, setIsFinished] = useState<boolean>(false);
   const [sessionIndex, setSessionIndex] = useState<number>(0);
   const initialTimer = useRef<number>();
   const sessionTimer = useRef<number>();
+  const currentSession = sessionList[sessionIndex];
 
-  const save = (value: number, submittedCode: string, duration: number) => {
-    addResult({ sessionIndex, value, submittedCode, duration });
+  const save = (
+    taskIndex: number,
+    submittedAnswer: string,
+    duration: number
+  ) => {
+    const value = currentSession.taskList[taskIndex];
+    const solution = currentSession.solutionList[taskIndex];
+    const result: Result = {
+      sessionIndex,
+      taskIndex,
+      value,
+      solution,
+      submittedAnswer,
+      duration,
+    };
+    addResult(result);
   };
 
   // initialize
@@ -37,7 +59,7 @@ export default function task({
   useEffect(() => {
     if (isFinished === false) return undefined;
 
-    if (sessionIndex < taskList.length - 1) {
+    if (sessionIndex < sessionList.length - 1) {
       sessionTimer.current = window.setTimeout(() => {
         setSessionIndex((prev) => prev + 1);
         setIsFinished(false);
@@ -51,12 +73,11 @@ export default function task({
 
   return (
     <>
-      <div>main task</div>
-      {isInitailized === false || isFinished ? (
-        <div>session 변경 중입니다</div>
-      ) : (
+      {isInitailized === false && <Initialization />}
+      {isInitailized && isFinished && <Interlude />}
+      {isInitailized && isFinished === false && (
         <TaskBox
-          taskList={taskList[sessionIndex]}
+          taskList={currentSession.taskList}
           waitTime={waitTime}
           visibleTime={visibleTime}
           setIsFinished={setIsFinished}

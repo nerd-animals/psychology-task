@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { CSVDownload, CSVLink } from 'react-csv';
+import React, { useEffect } from 'react';
+import { CSVDownload } from 'react-csv';
 import { AppStep, Subject, Result } from '../lib/type';
+import Button from '../component/button';
 
 export default function postTask({
   subject,
@@ -13,21 +14,24 @@ export default function postTask({
   clearResultList: () => void;
   setAppStep: React.Dispatch<React.SetStateAction<AppStep>>;
 }) {
-  const [isFinished, setIsFinished] = useState<boolean>(false);
-
   useEffect(() => {
-    console.log(resultList);
     clearResultList();
-    console.log(resultList);
   }, []);
 
   return (
     <>
-      <div>this is post-task page</div>
-      <CSVDownload data={resultList} target="_blank" />
-      <button type="button" onClick={() => setAppStep('home')}>
-        go Home
-      </button>
+      <div>Thank you</div>
+      {resultList.length && (
+        <CSVDownload
+          data={resultList.map((result) => ({
+            name: subject.subjectLabel,
+            date: subject.date.toLocaleString(),
+            ...result,
+          }))}
+          target="_blank"
+        />
+      )}
+      <Button label="메인으로 돌아가기" onClick={() => setAppStep('home')} />
     </>
   );
 }

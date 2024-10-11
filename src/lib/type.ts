@@ -1,3 +1,7 @@
+export const DIFF_FLAG = 'diff';
+export const SAME_FLAG = 'same';
+export const NONE_FLAG = '-';
+
 export type AppStep =
   | 'home'
   | 'setting'
@@ -9,25 +13,32 @@ export type AppStep =
   | 'task'
   | 'post-task';
 
+export interface Session {
+  id: string;
+  taskList: number[];
+  solutionList: string[];
+}
+
 export interface AppSetting {
   backCount: number;
-  trialList: number[];
-  taskList: number[][];
   initializeTime: number; // ms
   visibleTime: number; // ms
   waitTime: number; // ms
   sessionChangeTime: number; // ms
+  trialSession: Session;
+  sessionList: Session[];
 }
 
 export interface Result {
   sessionIndex: number;
+  taskIndex: number;
   value: number;
-  submittedCode: string | undefined;
+  solution: string;
+  submittedAnswer: string;
   duration: number;
 }
 
 export interface Subject {
-  subjectId: string; // uuid
   subjectLabel: string; // anything
   date: Date;
 }

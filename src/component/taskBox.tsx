@@ -1,4 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
+import { DIFF_FLAG, NONE_FLAG, SAME_FLAG } from '../lib/type';
+
+const SAME_FLAG_CODE = 'ControlRight';
+const DIFF_FLAG_CODE = 'ControlLeft';
 
 export default function taskBox({
   taskList,
@@ -11,16 +15,14 @@ export default function taskBox({
   waitTime: number;
   visibleTime: number;
   setIsFinished: (isFinished: boolean) => void;
-  save: (value: number, submittedCode: string, duration: number) => void;
+  save: (taskIndex: number, submittedAnswer: string, duration: number) => void;
 }) {
   const [index, setIndex] = useState<number>(0);
   const [isVisible, setIsVisible] = useState<boolean>(true);
-  const submittedCodeRef = useRef<string | undefined>(undefined);
+  const submittedAnswerRef = useRef<string | undefined>(undefined);
   const initialTimeRef = useRef<number>(window.performance.now());
   const durationRef = useRef<number>(-1);
   const visibleTimer = useRef<number>();
-
-  const getDisplayedValue = () => (isVisible ? taskList.at(index) : '+');
 
   useEffect(() => {
     if (index >= taskList.length) {
@@ -33,14 +35,14 @@ export default function taskBox({
 
       visibleTimer.current = window.setTimeout(() => {
         save(
-          taskList[index],
-          submittedCodeRef.current || '-',
+          index,
+          submittedAnswerRef.current || NONE_FLAG,
           durationRef.current
         );
         setIsVisible(true);
         setIndex((prev) => prev + 1);
         initialTimeRef.current = window.performance.now();
-        submittedCodeRef.current = undefined;
+        submittedAnswerRef.current = undefined;
         durationRef.current = -1;
       }, waitTime);
     }, visibleTime);
@@ -52,10 +54,13 @@ export default function taskBox({
   useEffect(() => {
     const onKeydown = (e: KeyboardEvent) => {
       e.preventDefault();
-      if (submittedCodeRef.current) return; //
+      if (submittedAnswerRef.current) return; //
 
-      if (e.code === 'ControlLeft' || e.code === 'ControlRight') {
-        submittedCodeRef.current = e.code;
+      if (e.code === DIFF_FLAG_CODE) {
+        submittedAnswerRef.current = DIFF_FLAG;
+        durationRef.current = window.performance.now() - initialTimeRef.current;
+      } else if (e.code === SAME_FLAG_CODE) {
+        submittedAnswerRef.current = SAME_FLAG;
         durationRef.current = window.performance.now() - initialTimeRef.current;
       }
     };
@@ -64,5 +69,5 @@ export default function taskBox({
     return () => window.removeEventListener('keydown', onKeydown);
   }, []);
 
-  return <div>{getDisplayedValue()}</div>;
+  return <div>{isVisible ? taskList.at(index) : '+'}</div>;
 }

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import Home from './step/home';
 import Setup from './step/setup';
 import StandBy from './step/standBy';
@@ -8,63 +8,64 @@ import PreTask from './step/preTask';
 import Task from './step/task';
 import PostTask from './step/postTask';
 import Setting from './step/setting';
+import Container from './component/container';
 import { AppSetting, AppStep, Subject, Result } from './lib/type';
 
 const INITIAL_APP_SETTING: AppSetting = {
   backCount: 2,
-  trialList: [1, 2, 3],
-  taskList: [
-    [1, 2, 3],
-    [4, 5, 6],
-  ],
   initializeTime: 3000,
   visibleTime: 300,
   waitTime: 1000,
   sessionChangeTime: 3000,
+  trialSession: { id: 'trial', taskList: [], solutionList: [] },
+  sessionList: [],
 };
 
 const INITIAL_SUBJECT: Subject = {
-  subjectId: '',
   subjectLabel: '',
   date: new Date(),
 };
 
 function App() {
   const [appStep, setAppStep] = useState<AppStep>('home');
-  const [appSetting, setAppSetting] = useState<AppSetting>(INITIAL_APP_SETTING);
-  const [subject, setSubject] = useState<Subject>(INITIAL_SUBJECT);
+  const subjectRef = useRef<Subject>(INITIAL_SUBJECT);
+  const appSettingRef = useRef<AppSetting>(INITIAL_APP_SETTING);
   const resultRef = useRef<Result[]>([]);
 
   return (
     <main>
-      <button type="button" onClick={() => setAppStep('home')}>
-        home
-      </button>
-      <div>
-        {appStep === 'home' && <Home setAppStep={setAppStep} />}
+      <Container>
+        {appStep === 'home' && (
+          <Home appSetting={appSettingRef.current} setAppStep={setAppStep} />
+        )}
         {appStep === 'setup' && (
-          <Setup setSubject={setSubject} setAppStep={setAppStep} />
+          <Setup
+            setSubject={(subject: Subject) => {
+              subjectRef.current = subject;
+            }}
+            setAppStep={setAppStep}
+          />
         )}
         {appStep === 'stand-by' && (
-          <StandBy subject={subject} setAppStep={setAppStep} />
+          <StandBy subject={subjectRef.current} setAppStep={setAppStep} />
         )}
         {appStep === 'explain' && (
-          <Explain appSetting={appSetting} setAppStep={setAppStep} />
+          <Explain appSetting={appSettingRef.current} setAppStep={setAppStep} />
         )}
         {appStep === 'trial' && (
-          <Trial appSetting={appSetting} setAppStep={setAppStep} />
+          <Trial appSetting={appSettingRef.current} setAppStep={setAppStep} />
         )}
         {appStep === 'pre-task' && <PreTask setAppStep={setAppStep} />}
         {appStep === 'task' && (
           <Task
-            appSetting={appSetting}
+            appSetting={appSettingRef.current}
             addResult={(result: Result) => resultRef.current.push(result)}
             setAppStep={setAppStep}
           />
         )}
         {appStep === 'post-task' && (
           <PostTask
-            subject={subject}
+            subject={subjectRef.current}
             resultList={resultRef.current}
             clearResultList={() => {
               resultRef.current = [];
@@ -74,12 +75,14 @@ function App() {
         )}
         {appStep === 'setting' && (
           <Setting
-            appSetting={appSetting}
-            setAppSetting={setAppSetting}
+            appSetting={appSettingRef.current}
+            setAppSetting={(appSetting: AppSetting) => {
+              appSettingRef.current = appSetting;
+            }}
             setAppStep={setAppStep}
           />
         )}
-      </div>
+      </Container>
     </main>
   );
 }

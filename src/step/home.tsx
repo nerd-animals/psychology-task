@@ -25,7 +25,7 @@ export default function home({
           if (isReady()) {
             setAppStep('setup');
           } else {
-            window.alert('설정을 완료해주세요.');
+            // todo: 설정 알림
           }
         }}
       />

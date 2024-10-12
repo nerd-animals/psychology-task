@@ -11,11 +11,8 @@ export default function standBy({
 }) {
   return (
     <>
-      <div>
-        <div>Subject Name: {subject.subjectLabel}</div>
-        <Button label="이름 재설정" onClick={() => setAppStep('setup')} />
-      </div>
-
+      <div>Subject Name: {subject.subjectLabel}</div>
+      <Button label="이름 재설정" onClick={() => setAppStep('setup')} />
       <Button label="과제 시작" onClick={() => setAppStep('explain')} />
     </>
   );

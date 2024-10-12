@@ -17,19 +17,21 @@ export default function home({
   };
 
   return (
-    <>
-      <div>N-back Task</div>
-      <Button
-        label="Start"
-        onClick={() => {
-          if (isReady()) {
-            setAppStep('setup');
-          } else {
-            // todo: 설정 알림
-          }
-        }}
-      />
-      <Button label="Setting" onClick={() => setAppStep('setting')} />
-    </>
+    <div className="flex flex-col items-center justify-center space-y-4">
+      <h1 className="text-3xl font-bold text-center">N back Task</h1>
+      <div className="flex space-x-4">
+        <Button
+          label="Start"
+          onClick={() => {
+            if (isReady()) {
+              setAppStep('setup');
+            } else {
+              // todo: 설정 알림
+            }
+          }}
+        />
+        <Button label="Setting" onClick={() => setAppStep('setting')} />
+      </div>
+    </div>
   );
 }

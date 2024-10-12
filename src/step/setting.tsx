@@ -45,36 +45,35 @@ export default function setting({
   };
 
   return (
-    <>
-      <div>
-        <Button
-          label="add Session"
-          onClick={() =>
-            setNewAppSetting({
-              ...newAppSetting,
-              sessionList: [
-                ...newAppSetting.sessionList,
-                { id: uuid(), taskList: [], solutionList: [] },
-              ],
-            })
-          }
-        />
-        <Button
-          label="remove Last Session"
-          onClick={() => {
-            setNewAppSetting({
-              ...newAppSetting,
-              sessionList: [
-                ...newAppSetting.sessionList.slice(
-                  0,
-                  newAppSetting.sessionList.length - 1
-                ),
-              ],
-            });
-          }}
-        />
-      </div>
-      <div>
+    <div className="space-y-4 w-full max-w-md">
+      <Button
+        label="add Session"
+        onClick={() =>
+          setNewAppSetting({
+            ...newAppSetting,
+            sessionList: [
+              ...newAppSetting.sessionList,
+              { id: uuid(), taskList: [], solutionList: [] },
+            ],
+          })
+        }
+      />
+      <Button
+        label="remove Last Session"
+        onClick={() => {
+          setNewAppSetting({
+            ...newAppSetting,
+            sessionList: [
+              ...newAppSetting.sessionList.slice(
+                0,
+                newAppSetting.sessionList.length - 1
+              ),
+            ],
+          });
+        }}
+      />
+      <div className="flex space-x-2">
+        <div>back count</div>
         <input
           type="number"
           value={newAppSetting.backCount}
@@ -87,42 +86,53 @@ export default function setting({
             }
           }}
         />
+      </div>
+      <div className="flex space-x-2">
+        <div>initializeTime(ms)</div>
         <input
           type="number"
-          placeholder="initializeTime(ms)"
           value={newAppSetting.initializeTime}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             const value = e.target.valueAsNumber || 0;
             setNewAppSetting({ ...newAppSetting, initializeTime: value });
           }}
         />
+      </div>
+      <div className="flex space-x-2">
+        <div>sessionChangeTime(ms)</div>
         <input
           type="number"
-          placeholder="sessionChangeTime(ms)"
           value={newAppSetting.sessionChangeTime}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             const value = e.target.valueAsNumber || 0;
             setNewAppSetting({ ...newAppSetting, sessionChangeTime: value });
           }}
         />
+      </div>
+      <div className="flex space-x-2">
+        <div>visibleTime(ms)</div>
         <input
           type="number"
-          placeholder="visibleTime(ms)"
           value={newAppSetting.visibleTime}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             const value = e.target.valueAsNumber || 0;
             setNewAppSetting({ ...newAppSetting, visibleTime: value });
           }}
         />
+      </div>
+      <div className="flex space-x-2">
+        <div>waitTime(ms)</div>
         <input
           type="number"
-          placeholder="waitTime(ms)"
           value={newAppSetting.waitTime}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             const value = e.target.valueAsNumber || 0;
             setNewAppSetting({ ...newAppSetting, waitTime: value });
           }}
         />
+      </div>
+      <div className="flex space-x-2">
+        <div>trial session</div>
         <input
           type="string"
           placeholder="trial"
@@ -140,11 +150,13 @@ export default function setting({
             });
           }}
         />
-        {newAppSetting.sessionList.map((session: Session, index) => (
+      </div>
+      {newAppSetting.sessionList.map((session: Session, index) => (
+        <div className="flex space-x-2">
+          <div>{`${index + 1}번째 session`}</div>
           <input
             key={session.id}
             type="string"
-            placeholder={`${index}-main task`}
             defaultValue={session.taskList.join(',')}
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
               const valueList = e.target.value
@@ -169,8 +181,8 @@ export default function setting({
               });
             }}
           />
-        ))}
-      </div>
+        </div>
+      ))}
       <Button label="home" onClick={() => setAppStep('home')} />
       <Button
         label="save"
@@ -187,6 +199,6 @@ export default function setting({
           });
         }}
       />
-    </>
+    </div>
   );
 }

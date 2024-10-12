@@ -31,14 +31,17 @@ const INITIAL_SUBJECT: Subject = {
   date: new Date(),
 };
 
+const NO_CURSOR_STEP = ['task', 'trial'];
+
 function App() {
   const [appStep, setAppStep] = useState<AppStep>('home');
   const subjectRef = useRef<Subject>(INITIAL_SUBJECT);
   const appSettingRef = useRef<AppSetting>(INITIAL_APP_SETTING);
   const resultRef = useRef<Result[]>([]);
 
+  const cursorOption = NO_CURSOR_STEP.includes(appStep) ? 'cursor-none' : '';
   return (
-    <main>
+    <main className={`${cursorOption}`}>
       <Container>
         {appStep === 'home' && (
           <Home appSetting={appSettingRef.current} setAppStep={setAppStep} />

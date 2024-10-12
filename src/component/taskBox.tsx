@@ -1,28 +1,54 @@
 import { useEffect, useRef, useState } from 'react';
-import { DIFF_FLAG, NONE_FLAG, SAME_FLAG } from '../lib/type';
+import { DIFF_FLAG, NONE_FLAG, SAME_FLAG, Session, Result } from '../lib/type';
 
 const SAME_FLAG_CODE = 'ControlRight';
 const DIFF_FLAG_CODE = 'ControlLeft';
 
 export default function taskBox({
-  taskList,
+  session,
   waitTime,
   visibleTime,
+  correctColor,
+  wrongColor,
   setIsFinished,
-  save,
+  addResult,
 }: {
-  taskList: number[];
+  session: Session;
   waitTime: number;
   visibleTime: number;
+  correctColor: string;
+  wrongColor: string;
   setIsFinished: (isFinished: boolean) => void;
-  save: (taskIndex: number, submittedAnswer: string, duration: number) => void;
+  addResult: (result: Result) => void;
 }) {
   const [index, setIndex] = useState<number>(0);
   const [isVisible, setIsVisible] = useState<boolean>(true);
+  const [color, setColor] = useState<string>('');
   const submittedAnswerRef = useRef<string | undefined>(undefined);
   const initialTimeRef = useRef<number>(window.performance.now());
   const durationRef = useRef<number>(-1);
   const visibleTimer = useRef<number>();
+  const { sessionIndex, taskList, solutionList } = session;
+
+  const appendResult = () => {
+    const result: Result = {
+      sessionIndex,
+      taskIndex: index,
+      value: taskList[index],
+      solution: solutionList[index],
+      submittedAnswer: submittedAnswerRef.current || NONE_FLAG,
+      duration: durationRef.current,
+    };
+    addResult(result);
+  };
+
+  const displayResult = () => {
+    if (submittedAnswerRef.current === solutionList[index]) {
+      setColor(correctColor);
+    } else {
+      setColor(wrongColor);
+    }
+  };
 
   useEffect(() => {
     if (index >= taskList.length) {
@@ -34,13 +60,10 @@ export default function taskBox({
       setIsVisible(false);
 
       visibleTimer.current = window.setTimeout(() => {
-        save(
-          index,
-          submittedAnswerRef.current || NONE_FLAG,
-          durationRef.current
-        );
+        appendResult();
         setIsVisible(true);
         setIndex((prev) => prev + 1);
+        setColor('');
         initialTimeRef.current = window.performance.now();
         submittedAnswerRef.current = undefined;
         durationRef.current = -1;
@@ -59,15 +82,26 @@ export default function taskBox({
       if (e.code === DIFF_FLAG_CODE) {
         submittedAnswerRef.current = DIFF_FLAG;
         durationRef.current = window.performance.now() - initialTimeRef.current;
+        displayResult();
       } else if (e.code === SAME_FLAG_CODE) {
         submittedAnswerRef.current = SAME_FLAG;
         durationRef.current = window.performance.now() - initialTimeRef.current;
+        displayResult();
       }
     };
     window.addEventListener('keydown', onKeydown);
 
     return () => window.removeEventListener('keydown', onKeydown);
-  }, []);
+  }, [index]);
 
-  return <div>{isVisible ? taskList.at(index) : '+'}</div>;
+  return (
+    <div
+      className={`w-full h-full flex items-center justify-center ${color}`}
+      style={{
+        fontSize: 'min(5vw, 5vh)',
+      }}
+    >
+      {isVisible ? taskList[index] : '+'}
+    </div>
+  );
 }

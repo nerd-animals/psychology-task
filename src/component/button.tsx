@@ -8,7 +8,11 @@ export default function button({
   onClick: () => void;
 }) {
   return (
-    <button className="border p-1" type="button" onClick={onClick}>
+    <button
+      className="px-2 py-1 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
+      type="button"
+      onClick={onClick}
+    >
       {label}
     </button>
   );

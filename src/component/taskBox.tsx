@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { DIFF_FLAG, NONE_FLAG, SAME_FLAG, Session, Result } from '../lib/type';
 
-const SAME_FLAG_CODE = 'ControlRight';
-const DIFF_FLAG_CODE = 'ControlLeft';
+const SAME_FLAG_CODE = 'Slash';
+const DIFF_FLAG_CODE = 'KeyZ';
 
 export default function taskBox({
   session,

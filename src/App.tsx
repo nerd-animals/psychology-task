@@ -65,6 +65,7 @@ function App() {
         )}
         {appStep === 'post-task' && (
           <PostTask
+            appSetting={appSettingRef.current}
             subject={subjectRef.current}
             resultList={resultRef.current}
             clearResultList={() => {

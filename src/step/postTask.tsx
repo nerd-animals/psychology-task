@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react';
 import { CSVDownload } from 'react-csv';
-import { AppStep, Subject, Result } from '../lib/type';
+import { AppSetting, AppStep, Subject, Result } from '../lib/type';
 import Button from '../component/button';
 
 export default function postTask({
+  appSetting,
   subject,
   resultList,
   clearResultList,
   setAppStep,
 }: {
+  appSetting: AppSetting;
   subject: Subject;
   resultList: Result[];
   clearResultList: () => void;
@@ -21,12 +23,20 @@ export default function postTask({
   return (
     <>
       <div>Thank you</div>
-      {resultList.length && (
+      {resultList.length > 0 && (
         <CSVDownload
           data={resultList.map((result) => ({
             name: subject.subjectLabel,
             date: subject.date.toLocaleString(),
+            backCount: appSetting.backCount,
+            initializeTime: appSetting.initializeTime,
+            sessionChangeTime: appSetting.sessionChangeTime,
+            visibleTime: appSetting.visibleTime,
+            waitTime: appSetting.waitTime,
             ...result,
+            sessionIndex: result.sessionIndex + 1,
+            taskIndex: result.taskIndex + 1,
+            score: result.solution === result.submittedAnswer ? 1 : 0,
           }))}
           target="_blank"
         />

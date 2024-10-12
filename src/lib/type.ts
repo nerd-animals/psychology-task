@@ -15,6 +15,7 @@ export type AppStep =
 
 export interface Session {
   id: string;
+  sessionIndex: number;
   taskList: number[];
   solutionList: string[];
 }

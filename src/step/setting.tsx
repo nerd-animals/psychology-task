@@ -53,7 +53,12 @@ export default function setting({
             ...newAppSetting,
             sessionList: [
               ...newAppSetting.sessionList,
-              { id: uuid(), taskList: [], solutionList: [] },
+              {
+                id: uuid(),
+                sessionIndex: newAppSetting.sessionList.length,
+                taskList: [],
+                solutionList: [],
+              },
             ],
           })
         }
@@ -152,10 +157,9 @@ export default function setting({
         />
       </div>
       {newAppSetting.sessionList.map((session: Session, index) => (
-        <div className="flex space-x-2">
+        <div key={session.id} className="flex space-x-2">
           <div>{`${index + 1}번째 session`}</div>
           <input
-            key={session.id}
             type="string"
             defaultValue={session.taskList.join(',')}
             onChange={(e: ChangeEvent<HTMLInputElement>) => {

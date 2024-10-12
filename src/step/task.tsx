@@ -27,24 +27,6 @@ export default function task({
   const sessionTimer = useRef<number>();
   const currentSession = sessionList[sessionIndex];
 
-  const save = (
-    taskIndex: number,
-    submittedAnswer: string,
-    duration: number
-  ) => {
-    const value = currentSession.taskList[taskIndex];
-    const solution = currentSession.solutionList[taskIndex];
-    const result: Result = {
-      sessionIndex,
-      taskIndex,
-      value,
-      solution,
-      submittedAnswer,
-      duration,
-    };
-    addResult(result);
-  };
-
   // initialize
   useEffect(() => {
     initialTimer.current = window.setTimeout(
@@ -77,11 +59,13 @@ export default function task({
       {isInitailized && isFinished && <Interlude />}
       {isInitailized && isFinished === false && (
         <TaskBox
-          taskList={currentSession.taskList}
+          session={currentSession}
           waitTime={waitTime}
           visibleTime={visibleTime}
+          correctColor="bg-gray-300"
+          wrongColor="bg-gray-300"
           setIsFinished={setIsFinished}
-          save={save}
+          addResult={addResult}
         />
       )}
     </>

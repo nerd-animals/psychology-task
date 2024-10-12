@@ -17,7 +17,12 @@ const INITIAL_APP_SETTING: AppSetting = {
   visibleTime: 300,
   waitTime: 1000,
   sessionChangeTime: 3000,
-  trialSession: { id: 'trial', taskList: [], solutionList: [] },
+  trialSession: {
+    id: 'trial',
+    sessionIndex: 0,
+    taskList: [],
+    solutionList: [],
+  },
   sessionList: [],
 };
 

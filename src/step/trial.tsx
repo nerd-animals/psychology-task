@@ -40,11 +40,13 @@ export default function trial({
       {isInitailized === false && <Initialization />}
       {isInitailized && (
         <TaskBox
-          taskList={trialSession.taskList}
+          session={trialSession}
           waitTime={waitTime}
           visibleTime={visibleTime}
+          correctColor="bg-green-300"
+          wrongColor="bg-red-300"
           setIsFinished={setIsFinished}
-          save={() => {}}
+          addResult={() => {}}
         />
       )}
     </>

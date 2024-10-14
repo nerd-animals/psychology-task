@@ -22,7 +22,7 @@ export default function postTask({
 
   return (
     <>
-      <div>Thank you</div>
+      <div>수고하셨습니다.</div>
       {resultList.length > 0 && (
         <CSVDownload
           data={resultList.map((result) => ({

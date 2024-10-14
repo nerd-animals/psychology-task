@@ -7,5 +7,9 @@ export default function preTask({
 }: {
   setAppStep: React.Dispatch<React.SetStateAction<AppStep>>;
 }) {
-  return <Button label="본 과제 시작하기" onClick={() => setAppStep('task')} />;
+  return (
+    <div className="w-full h-full flex flex-col items-center p-2 space-y-4">
+      <Button label="본 과제 시작하기" onClick={() => setAppStep('task')} />
+    </div>
+  );
 }

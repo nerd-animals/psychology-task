@@ -66,8 +66,6 @@ function App() {
 
     appSettingRef.current.trialSession = { ...solvedTrialSession };
     appSettingRef.current.sessionList = [...solvedSessionList];
-
-    console.log(appSettingRef.current);
   }, []);
 
   return (

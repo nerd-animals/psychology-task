@@ -21,7 +21,7 @@ export default function setup({
   };
 
   return (
-    <>
+    <div className="flex flex-col items-center justify-center space-y-4">
       <div>피실험자의 이름 또는 ID를 입력해주세요.</div>
       <div>
         <input
@@ -40,6 +40,6 @@ export default function setup({
           setAppStep('stand-by');
         }}
       />
-    </>
+    </div>
   );
 }

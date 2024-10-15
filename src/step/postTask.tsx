@@ -21,8 +21,10 @@ export default function postTask({
   }, []);
 
   return (
-    <>
-      <div>Thank you</div>
+    <div className="flex flex-col items-center justify-center space-y-4">
+      <div className="text-3xl" style={{ marginBottom: '3vh' }}>
+        수고하셨습니다.
+      </div>
       {resultList.length > 0 && (
         <CSVDownload
           data={resultList.map((result) => ({
@@ -42,6 +44,6 @@ export default function postTask({
         />
       )}
       <Button label="메인으로 돌아가기" onClick={() => setAppStep('home')} />
-    </>
+    </div>
   );
 }

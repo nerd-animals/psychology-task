@@ -6,6 +6,7 @@ const DIFF_FLAG_CODE = 'KeyZ';
 
 export default function taskBox({
   session,
+  backCount,
   waitTime,
   visibleTime,
   correctColor,
@@ -14,6 +15,7 @@ export default function taskBox({
   addResult,
 }: {
   session: Session;
+  backCount: number;
   waitTime: number;
   visibleTime: number;
   correctColor: string;
@@ -77,7 +79,7 @@ export default function taskBox({
   useEffect(() => {
     const onKeydown = (e: KeyboardEvent) => {
       e.preventDefault();
-      if (submittedAnswerRef.current) return; //
+      if (index < backCount || submittedAnswerRef.current) return; //
 
       if (e.code === DIFF_FLAG_CODE) {
         submittedAnswerRef.current = DIFF_FLAG;

@@ -1,4 +1,5 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { v4 as uuid } from 'uuid';
 import Home from './step/home';
 import Setup from './step/setup';
 import StandBy from './step/standBy';
@@ -10,20 +11,34 @@ import PostTask from './step/postTask';
 import Setting from './step/setting';
 import Container from './component/container';
 import { AppSetting, AppStep, Subject, Result } from './lib/type';
+import { solveSession } from './lib/util';
 
 const INITIAL_APP_SETTING: AppSetting = {
-  backCount: 2,
-  initializeTime: 3000,
-  visibleTime: 300,
-  waitTime: 1000,
-  sessionChangeTime: 3000,
+  backCount: 3,
+  initializeTime: 5000,
+  visibleTime: 500,
+  waitTime: 2000,
+  sessionChangeTime: 5000,
   trialSession: {
     id: 'trial',
     sessionIndex: 0,
-    taskList: [],
+    taskList: [2, 1, 8, 5, 1, 7],
     solutionList: [],
   },
-  sessionList: [],
+  sessionList: [
+    {
+      id: uuid(),
+      sessionIndex: 0,
+      taskList: [3, 5, 7, 4, 6, 7],
+      solutionList: [],
+    },
+    {
+      id: uuid(),
+      sessionIndex: 0,
+      taskList: [9, 4, 3, 5, 4, 7],
+      solutionList: [],
+    },
+  ],
 };
 
 const INITIAL_SUBJECT: Subject = {
@@ -38,8 +53,21 @@ function App() {
   const subjectRef = useRef<Subject>(INITIAL_SUBJECT);
   const appSettingRef = useRef<AppSetting>(INITIAL_APP_SETTING);
   const resultRef = useRef<Result[]>([]);
-
   const cursorOption = NO_CURSOR_STEP.includes(appStep) ? 'cursor-none' : '';
+
+  useEffect(() => {
+    const solvedTrialSession = solveSession(
+      appSettingRef.current.backCount,
+      appSettingRef.current.trialSession
+    );
+    const solvedSessionList = appSettingRef.current.sessionList.map((session) =>
+      solveSession(appSettingRef.current.backCount, session)
+    );
+
+    appSettingRef.current.trialSession = { ...solvedTrialSession };
+    appSettingRef.current.sessionList = [...solvedSessionList];
+  }, []);
+
   return (
     <main className={`${cursorOption}`}>
       <Container>

@@ -1,13 +1,7 @@
 import React, { ChangeEvent, useState } from 'react';
 import { v4 as uuid } from 'uuid';
-import {
-  AppSetting,
-  AppStep,
-  Session,
-  DIFF_FLAG,
-  SAME_FLAG,
-  NONE_FLAG,
-} from '../lib/type';
+import { AppSetting, AppStep, Session } from '../lib/type';
+import { solveSession } from '../lib/util';
 import Button from '../component/button';
 
 const VALID_BACK_COUNT = [2, 3, 4];
@@ -24,25 +18,6 @@ export default function setting({
   const [newAppSetting, setNewAppSetting] = useState<AppSetting>({
     ...appSetting,
   });
-
-  const solveSession = (session: Session) => {
-    const { backCount } = newAppSetting;
-
-    const solutionList = session.taskList.map((value, index) => {
-      if (index < backCount) {
-        return NONE_FLAG;
-      }
-      const nBackValue = session.taskList.at(index - backCount);
-
-      if (value === nBackValue) {
-        return SAME_FLAG;
-      }
-      return DIFF_FLAG;
-    });
-
-    const solvedSession = { ...session, solutionList: [...solutionList] };
-    return solvedSession;
-  };
 
   return (
     <div className="space-y-4 w-full max-w-md">
@@ -191,9 +166,12 @@ export default function setting({
       <Button
         label="save"
         onClick={() => {
-          const solvedTrialSession = solveSession(newAppSetting.trialSession);
+          const solvedTrialSession = solveSession(
+            newAppSetting.backCount,
+            newAppSetting.trialSession
+          );
           const solvedSessionList = newAppSetting.sessionList.map((session) =>
-            solveSession(session)
+            solveSession(newAppSetting.backCount, session)
           );
 
           setAppSetting({

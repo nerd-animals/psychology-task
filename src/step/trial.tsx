@@ -10,7 +10,8 @@ export default function trial({
   appSetting: AppSetting;
   setAppStep: React.Dispatch<React.SetStateAction<AppStep>>;
 }) {
-  const { trialSession, initializeTime, waitTime, visibleTime } = appSetting;
+  const { backCount, trialSession, initializeTime, waitTime, visibleTime } =
+    appSetting;
   const [isFinished, setIsFinished] = useState<boolean>(false);
   const [isInitailized, setIsInitailized] = useState<boolean>(false);
   const initialTimer = useRef<number>();
@@ -41,6 +42,7 @@ export default function trial({
       {isInitailized && (
         <TaskBox
           session={trialSession}
+          backCount={backCount}
           waitTime={waitTime}
           visibleTime={visibleTime}
           correctColor="bg-green-300"

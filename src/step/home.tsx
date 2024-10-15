@@ -10,6 +10,7 @@ export default function home({
   setAppStep: React.Dispatch<React.SetStateAction<AppStep>>;
 }) {
   const isReady = () => {
+    if (appSetting.trialSession.taskList.length === 0) return false;
     if (appSetting.sessionList.length === 0) return false;
     if (appSetting.sessionList.some((session) => session.taskList.length === 0))
       return false;

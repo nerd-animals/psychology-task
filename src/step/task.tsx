@@ -15,6 +15,7 @@ export default function task({
 }) {
   const {
     sessionList,
+    backCount,
     initializeTime,
     waitTime,
     visibleTime,
@@ -60,6 +61,7 @@ export default function task({
       {isInitailized && isFinished === false && (
         <TaskBox
           session={currentSession}
+          backCount={backCount}
           waitTime={waitTime}
           visibleTime={visibleTime}
           correctColor="bg-gray-300"

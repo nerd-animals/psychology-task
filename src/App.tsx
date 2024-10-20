@@ -91,7 +91,9 @@ function App() {
         {appStep === 'trial' && (
           <Trial appSetting={appSettingRef.current} setAppStep={setAppStep} />
         )}
-        {appStep === 'pre-task' && <PreTask setAppStep={setAppStep} />}
+        {appStep === 'pre-task' && (
+          <PreTask appSetting={appSettingRef.current} setAppStep={setAppStep} />
+        )}
         {appStep === 'task' && (
           <Task
             appSetting={appSettingRef.current}

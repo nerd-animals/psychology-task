@@ -15,7 +15,7 @@ export default function setup({
     // todo: inputRef가 비어있을 때, toast ui로 경고 띄우기
 
     setSubject({
-      subjectLabel: inputRef.current,
+      subjectLabel: inputRef.current || 'NULL',
       date: new Date(),
     });
   };

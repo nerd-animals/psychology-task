@@ -79,15 +79,17 @@ export default function taskBox({
   useEffect(() => {
     const onKeydown = (e: KeyboardEvent) => {
       e.preventDefault();
-      if (index < backCount || submittedAnswerRef.current) return; //
+      if (submittedAnswerRef.current) return; //
 
       if (e.code === DIFF_FLAG_CODE) {
         submittedAnswerRef.current = DIFF_FLAG;
         durationRef.current = window.performance.now() - initialTimeRef.current;
-        displayResult();
       } else if (e.code === SAME_FLAG_CODE) {
         submittedAnswerRef.current = SAME_FLAG;
         durationRef.current = window.performance.now() - initialTimeRef.current;
+      }
+
+      if (index >= backCount) {
         displayResult();
       }
     };

@@ -98,7 +98,7 @@ export default function taskBox({
 
   return (
     <div
-      className={`w-full h-full flex items-center justify-center ${color}`}
+      className={`w-full min-h-screen flex items-center justify-center ${color}`}
       style={{
         fontSize: 'min(5vw, 5vh)',
       }}

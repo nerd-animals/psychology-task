@@ -164,9 +164,6 @@ export default function explain({
 
   return (
     <div className="flex flex-col justify-between w-full h-full">
-      {/* 최상단 제목 */}
-      <h1 className="text-2xl font-bold text-center my-2">문제 설명</h1>
-
       {/* 중간 설명 영역 (스크롤 가능) */}
       <div className="flex-grow overflow-y-auto my-4 px-4 flex flex-col items-center text-center">
         {explainList[index]()}

@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/psychology-n-back-task/static/css/main.9a1737cb.css",
-    "main.js": "/psychology-n-back-task/static/js/main.8ed9be95.js",
+    "main.css": "/psychology-n-back-task/static/css/main.5403f466.css",
+    "main.js": "/psychology-n-back-task/static/js/main.53b97c6d.js",
     "index.html": "/psychology-n-back-task/index.html",
-    "main.9a1737cb.css.map": "/psychology-n-back-task/static/css/main.9a1737cb.css.map",
-    "main.8ed9be95.js.map": "/psychology-n-back-task/static/js/main.8ed9be95.js.map"
+    "main.5403f466.css.map": "/psychology-n-back-task/static/css/main.5403f466.css.map",
+    "main.53b97c6d.js.map": "/psychology-n-back-task/static/js/main.53b97c6d.js.map"
   },
   "entrypoints": [
-    "static/css/main.9a1737cb.css",
-    "static/js/main.8ed9be95.js"
+    "static/css/main.5403f466.css",
+    "static/js/main.53b97c6d.js"
   ]
 }

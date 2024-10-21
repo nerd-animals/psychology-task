@@ -79,15 +79,17 @@ export default function taskBox({
   useEffect(() => {
     const onKeydown = (e: KeyboardEvent) => {
       e.preventDefault();
-      if (index < backCount || submittedAnswerRef.current) return; //
+      if (submittedAnswerRef.current) return; //
 
       if (e.code === DIFF_FLAG_CODE) {
         submittedAnswerRef.current = DIFF_FLAG;
         durationRef.current = window.performance.now() - initialTimeRef.current;
-        displayResult();
       } else if (e.code === SAME_FLAG_CODE) {
         submittedAnswerRef.current = SAME_FLAG;
         durationRef.current = window.performance.now() - initialTimeRef.current;
+      }
+
+      if (index >= backCount) {
         displayResult();
       }
     };
@@ -100,7 +102,7 @@ export default function taskBox({
     <div
       className={`w-full min-h-screen flex items-center justify-center ${color}`}
       style={{
-        fontSize: 'min(5vw, 5vh)',
+        fontSize: 'min(20vw, 20vh)',
       }}
     >
       {isVisible ? taskList[index] : '+'}

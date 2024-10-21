@@ -34,7 +34,7 @@ const INITIAL_APP_SETTING: AppSetting = {
     },
     {
       id: uuid(),
-      sessionIndex: 0,
+      sessionIndex: 1,
       taskList: [9, 4, 3, 5, 4, 7],
       solutionList: [],
     },

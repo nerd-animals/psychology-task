@@ -100,7 +100,7 @@ export default function taskBox({
     <div
       className={`w-full min-h-screen flex items-center justify-center ${color}`}
       style={{
-        fontSize: 'min(5vw, 5vh)',
+        fontSize: 'min(20vw, 20vh)',
       }}
     >
       {isVisible ? taskList[index] : '+'}

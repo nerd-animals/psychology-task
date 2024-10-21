@@ -64,13 +64,20 @@ export default function explain({
         </p>
         <div className="flex justify-center items-center space-x-4">
           {EXAMPLE.map((number, i) => (
-            <div
-              key={uuid()}
-              className={`flex flex-col items-center justify-center border border-gray-300 rounded-lg ${i < backCount ? 'bg-gray-300' : ''}`}
-            >
-              <div className="text-sm px-1 my-3">{`${i + 1}번째 숫자`}</div>
-              <div className="w-full h-0.5 bg-gray-400 my-1" />
-              <div className="text-lg py-5 font-semibold">{number}</div>
+            <div className="flex flex-col items-center justify-center space-y-2">
+              <div
+                key={uuid()}
+                className={`flex flex-col items-center justify-center border border-gray-300 rounded-lg ${i < backCount ? 'bg-gray-300' : ''}`}
+              >
+                <div className="text-sm px-1 my-3">{`${i + 1}번째 숫자`}</div>
+                <div className="w-full h-0.5 bg-gray-400 my-1" />
+                <div className="text-lg py-5 font-semibold">{number}</div>
+              </div>
+              <img
+                src={`${process.env.PUBLIC_URL}/images/arrow-up.png`}
+                className={`w-8 h-8 ${i < backCount ? '' : 'invisible'}`}
+                alt=""
+              />
             </div>
           ))}
         </div>
@@ -98,13 +105,20 @@ export default function explain({
         </p>
         <div className="flex justify-center items-center space-x-4">
           {EXAMPLE.map((number, i) => (
-            <div
-              key={uuid()}
-              className={`flex flex-col items-center justify-center border border-gray-300 rounded-lg ${i === idx || i === idx - backCount ? bgColor : ''}`}
-            >
-              <div className="text-sm px-1 my-3">{`${i + 1}번째 숫자`}</div>
-              <div className="w-full h-0.5 bg-gray-400 my-1" />
-              <div className="text-lg py-5 font-semibold">{number}</div>
+            <div className="flex flex-col items-center justify-center space-y-2">
+              <div
+                key={uuid()}
+                className={`flex flex-col items-center justify-center border border-gray-300 rounded-lg ${i === idx || i === idx - backCount ? bgColor : ''}`}
+              >
+                <div className="text-sm px-1 my-3">{`${i + 1}번째 숫자`}</div>
+                <div className="w-full h-0.5 bg-gray-400 my-1" />
+                <div className="text-lg py-5 font-semibold">{number}</div>
+              </div>{' '}
+              <img
+                src={`${process.env.PUBLIC_URL}/images/arrow-up.png`}
+                className={`w-8 h-8 ${i === idx ? '' : 'invisible'}`}
+                alt=""
+              />
             </div>
           ))}
         </div>
@@ -130,10 +144,7 @@ export default function explain({
         일련의 숫자가 제시되면, {backCount + 1}번째 숫자부터 &quot;z&quot; 혹은
         &quot;/&quot;키를 눌러주세요.
       </p>
-      <p>
-        연습 과제에서는 정답 여부가 표시되지만, 본 과제에서는 제출 여부만
-        표시됩니다.
-      </p>
+      <p>연습 과제에서는 정답 여부가 표시됩니다!</p>
       <ul className="list-disc pl-5">
         <li>초록색 : 정답</li>
         <li>빨간색 : 오답</li>

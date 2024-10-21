@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Result, AppSetting, AppStep } from '../lib/type';
 import TaskBox from '../component/taskBox';
-import Initialization from '../component/initialization';
-import Interlude from '../component/interlude';
 
 export default function task({
   appSetting,
@@ -56,8 +54,12 @@ export default function task({
 
   return (
     <>
-      {isInitailized === false && <Initialization />}
-      {isInitailized && isFinished && <Interlude />}
+      {isInitailized === false && (
+        <div>잠시 후, 시작됩니다. 화면을 집중해주세요!</div>
+      )}
+      {isInitailized && isFinished && (
+        <div>잠시 후, 다음 세션이 시작됩니다.</div>
+      )}
       {isInitailized && isFinished === false && (
         <TaskBox
           session={currentSession}

@@ -41,7 +41,7 @@ export default function explain({
           키는 숫자가 보인 순간부터 다음 숫자가 제시되기 전까지 누를 수
           있습니다. 일치 여부에 따라 다음의 키를 눌러주세요.
         </p>
-        <ul className="list-disc pl-5">
+        <ul className="list-disc list-inside">
           <li>
             &quot;/&quot; : 현재 화면에 표시된 숫자가 {backCount}번째 전에
             제시된 숫자와 같을 때
@@ -64,13 +64,20 @@ export default function explain({
         </p>
         <div className="flex justify-center items-center space-x-4">
           {EXAMPLE.map((number, i) => (
-            <div
-              key={uuid()}
-              className={`flex flex-col items-center justify-center border border-gray-300 rounded-lg ${i < backCount ? 'bg-gray-300' : ''}`}
-            >
-              <div className="text-sm px-1 my-3">{`${i + 1}번째 숫자`}</div>
-              <div className="w-full h-0.5 bg-gray-400 my-1" />
-              <div className="text-lg py-5 font-semibold">{number}</div>
+            <div className="flex flex-col items-center justify-center space-y-2">
+              <div
+                key={uuid()}
+                className={`flex flex-col items-center justify-center border border-gray-300 rounded-lg ${i < backCount ? 'bg-gray-300' : ''}`}
+              >
+                <div className="text-sm px-1 my-3">{`${i + 1}번째 숫자`}</div>
+                <div className="w-full h-0.5 bg-gray-400 my-1" />
+                <div className="text-lg py-5 font-semibold">{number}</div>
+              </div>
+              <img
+                src={`${process.env.PUBLIC_URL}/images/arrow-up.png`}
+                className={`w-8 h-8 ${i < backCount ? '' : 'invisible'}`}
+                alt=""
+              />
             </div>
           ))}
         </div>
@@ -98,13 +105,20 @@ export default function explain({
         </p>
         <div className="flex justify-center items-center space-x-4">
           {EXAMPLE.map((number, i) => (
-            <div
-              key={uuid()}
-              className={`flex flex-col items-center justify-center border border-gray-300 rounded-lg ${i === idx || i === idx - backCount ? bgColor : ''}`}
-            >
-              <div className="text-sm px-1 my-3">{`${i + 1}번째 숫자`}</div>
-              <div className="w-full h-0.5 bg-gray-400 my-1" />
-              <div className="text-lg py-5 font-semibold">{number}</div>
+            <div className="flex flex-col items-center justify-center space-y-2">
+              <div
+                key={uuid()}
+                className={`flex flex-col items-center justify-center border border-gray-300 rounded-lg ${i === idx || i === idx - backCount ? bgColor : ''}`}
+              >
+                <div className="text-sm px-1 my-3">{`${i + 1}번째 숫자`}</div>
+                <div className="w-full h-0.5 bg-gray-400 my-1" />
+                <div className="text-lg py-5 font-semibold">{number}</div>
+              </div>{' '}
+              <img
+                src={`${process.env.PUBLIC_URL}/images/arrow-up.png`}
+                className={`w-8 h-8 ${i === idx ? '' : 'invisible'}`}
+                alt=""
+              />
             </div>
           ))}
         </div>
@@ -130,11 +144,8 @@ export default function explain({
         일련의 숫자가 제시되면, {backCount + 1}번째 숫자부터 &quot;z&quot; 혹은
         &quot;/&quot;키를 눌러주세요.
       </p>
-      <p>
-        연습 과제에서는 정답 여부가 표시되지만, 본 과제에서는 제출 여부만
-        표시됩니다.
-      </p>
-      <ul className="list-disc pl-5">
+      <p>연습 과제에서는 정답 여부가 표시됩니다!</p>
+      <ul className="list-disc list-inside">
         <li>초록색 : 정답</li>
         <li>빨간색 : 오답</li>
       </ul>
@@ -157,12 +168,12 @@ export default function explain({
       <h1 className="text-2xl font-bold text-center my-2">문제 설명</h1>
 
       {/* 중간 설명 영역 (스크롤 가능) */}
-      <div className="flex-grow overflow-y-auto my-4 px-4">
+      <div className="flex-grow overflow-y-auto my-4 px-4 flex flex-col items-center text-center">
         {explainList[index]()}
       </div>
 
       {/* 하단 좌우 버튼 */}
-      <div className="flex justify-between px-4 py-2">
+      <div className="flex justify-between px-4 py-2 absolute bottom-2 left-1 right-1">
         <button
           type="button"
           className={`bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 ${index === 0 ? 'invisible' : ''}`}

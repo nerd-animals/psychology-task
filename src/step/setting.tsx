@@ -21,25 +21,27 @@ export default function setting({
 
   return (
     <div className="space-y-4 w-full max-w-md">
-      <Button label="home" onClick={() => setAppStep('home')} />
-      <Button
-        label="save"
-        onClick={() => {
-          const solvedTrialSession = solveSession(
-            newAppSetting.backCount,
-            newAppSetting.trialSession
-          );
-          const solvedSessionList = newAppSetting.sessionList.map((session) =>
-            solveSession(newAppSetting.backCount, session)
-          );
+      <div className="flex justify-between">
+        <Button label="home" onClick={() => setAppStep('home')} />
+        <Button
+          label="save"
+          onClick={() => {
+            const solvedTrialSession = solveSession(
+              newAppSetting.backCount,
+              newAppSetting.trialSession
+            );
+            const solvedSessionList = newAppSetting.sessionList.map((session) =>
+              solveSession(newAppSetting.backCount, session)
+            );
 
-          setAppSetting({
-            ...newAppSetting,
-            trialSession: { ...solvedTrialSession },
-            sessionList: [...solvedSessionList],
-          });
-        }}
-      />
+            setAppSetting({
+              ...newAppSetting,
+              trialSession: { ...solvedTrialSession },
+              sessionList: [...solvedSessionList],
+            });
+          }}
+        />
+      </div>
       <div className="flex grid grid-cols-2 space-x-2">
         <div>back count</div>
         <input

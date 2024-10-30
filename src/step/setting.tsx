@@ -21,34 +21,22 @@ export default function setting({
 
   return (
     <div className="space-y-4 w-full max-w-md">
+      <Button label="home" onClick={() => setAppStep('home')} />
       <Button
-        label="add Session"
-        onClick={() =>
-          setNewAppSetting({
-            ...newAppSetting,
-            sessionList: [
-              ...newAppSetting.sessionList,
-              {
-                id: uuid(),
-                sessionIndex: newAppSetting.sessionList.length,
-                taskList: [],
-                solutionList: [],
-              },
-            ],
-          })
-        }
-      />
-      <Button
-        label="remove Last Session"
+        label="save"
         onClick={() => {
-          setNewAppSetting({
+          const solvedTrialSession = solveSession(
+            newAppSetting.backCount,
+            newAppSetting.trialSession
+          );
+          const solvedSessionList = newAppSetting.sessionList.map((session) =>
+            solveSession(newAppSetting.backCount, session)
+          );
+
+          setAppSetting({
             ...newAppSetting,
-            sessionList: [
-              ...newAppSetting.sessionList.slice(
-                0,
-                newAppSetting.sessionList.length - 1
-              ),
-            ],
+            trialSession: { ...solvedTrialSession },
+            sessionList: [...solvedSessionList],
           });
         }}
       />
@@ -162,22 +150,34 @@ export default function setting({
           />
         </div>
       ))}
-      <Button label="home" onClick={() => setAppStep('home')} />
       <Button
-        label="save"
-        onClick={() => {
-          const solvedTrialSession = solveSession(
-            newAppSetting.backCount,
-            newAppSetting.trialSession
-          );
-          const solvedSessionList = newAppSetting.sessionList.map((session) =>
-            solveSession(newAppSetting.backCount, session)
-          );
-
-          setAppSetting({
+        label="add Session"
+        onClick={() =>
+          setNewAppSetting({
             ...newAppSetting,
-            trialSession: { ...solvedTrialSession },
-            sessionList: [...solvedSessionList],
+            sessionList: [
+              ...newAppSetting.sessionList,
+              {
+                id: uuid(),
+                sessionIndex: newAppSetting.sessionList.length,
+                taskList: [],
+                solutionList: [],
+              },
+            ],
+          })
+        }
+      />
+      <Button
+        label="remove Last Session"
+        onClick={() => {
+          setNewAppSetting({
+            ...newAppSetting,
+            sessionList: [
+              ...newAppSetting.sessionList.slice(
+                0,
+                newAppSetting.sessionList.length - 1
+              ),
+            ],
           });
         }}
       />

@@ -21,38 +21,28 @@ export default function setting({
 
   return (
     <div className="space-y-4 w-full max-w-md">
-      <Button
-        label="add Session"
-        onClick={() =>
-          setNewAppSetting({
-            ...newAppSetting,
-            sessionList: [
-              ...newAppSetting.sessionList,
-              {
-                id: uuid(),
-                sessionIndex: newAppSetting.sessionList.length,
-                taskList: [],
-                solutionList: [],
-              },
-            ],
-          })
-        }
-      />
-      <Button
-        label="remove Last Session"
-        onClick={() => {
-          setNewAppSetting({
-            ...newAppSetting,
-            sessionList: [
-              ...newAppSetting.sessionList.slice(
-                0,
-                newAppSetting.sessionList.length - 1
-              ),
-            ],
-          });
-        }}
-      />
-      <div className="flex space-x-2">
+      <div className="flex justify-between">
+        <Button label="home" onClick={() => setAppStep('home')} />
+        <Button
+          label="save"
+          onClick={() => {
+            const solvedTrialSession = solveSession(
+              newAppSetting.backCount,
+              newAppSetting.trialSession
+            );
+            const solvedSessionList = newAppSetting.sessionList.map((session) =>
+              solveSession(newAppSetting.backCount, session)
+            );
+
+            setAppSetting({
+              ...newAppSetting,
+              trialSession: { ...solvedTrialSession },
+              sessionList: [...solvedSessionList],
+            });
+          }}
+        />
+      </div>
+      <div className="flex grid grid-cols-2 space-x-2">
         <div>back count</div>
         <input
           type="number"
@@ -67,7 +57,7 @@ export default function setting({
           }}
         />
       </div>
-      <div className="flex space-x-2">
+      <div className="flex grid grid-cols-2 space-x-2">
         <div>initializeTime(ms)</div>
         <input
           type="number"
@@ -78,7 +68,7 @@ export default function setting({
           }}
         />
       </div>
-      <div className="flex space-x-2">
+      <div className="flex grid grid-cols-2 space-x-2">
         <div>sessionChangeTime(ms)</div>
         <input
           type="number"
@@ -89,7 +79,7 @@ export default function setting({
           }}
         />
       </div>
-      <div className="flex space-x-2">
+      <div className="flex grid grid-cols-2 space-x-2">
         <div>visibleTime(ms)</div>
         <input
           type="number"
@@ -100,7 +90,7 @@ export default function setting({
           }}
         />
       </div>
-      <div className="flex space-x-2">
+      <div className="flex grid grid-cols-2 space-x-2">
         <div>waitTime(ms)</div>
         <input
           type="number"
@@ -111,7 +101,7 @@ export default function setting({
           }}
         />
       </div>
-      <div className="flex space-x-2">
+      <div className="flex grid grid-cols-2 space-x-2">
         <div>trial session</div>
         <input
           type="string"
@@ -132,7 +122,7 @@ export default function setting({
         />
       </div>
       {newAppSetting.sessionList.map((session: Session, index) => (
-        <div key={session.id} className="flex space-x-2">
+        <div key={session.id} className="flex grid grid-cols-2 space-x-2">
           <div>{`${index + 1}번째 session`}</div>
           <input
             type="string"
@@ -162,22 +152,34 @@ export default function setting({
           />
         </div>
       ))}
-      <Button label="home" onClick={() => setAppStep('home')} />
       <Button
-        label="save"
-        onClick={() => {
-          const solvedTrialSession = solveSession(
-            newAppSetting.backCount,
-            newAppSetting.trialSession
-          );
-          const solvedSessionList = newAppSetting.sessionList.map((session) =>
-            solveSession(newAppSetting.backCount, session)
-          );
-
-          setAppSetting({
+        label="add Session"
+        onClick={() =>
+          setNewAppSetting({
             ...newAppSetting,
-            trialSession: { ...solvedTrialSession },
-            sessionList: [...solvedSessionList],
+            sessionList: [
+              ...newAppSetting.sessionList,
+              {
+                id: uuid(),
+                sessionIndex: newAppSetting.sessionList.length,
+                taskList: [],
+                solutionList: [],
+              },
+            ],
+          })
+        }
+      />
+      <Button
+        label="remove Last Session"
+        onClick={() => {
+          setNewAppSetting({
+            ...newAppSetting,
+            sessionList: [
+              ...newAppSetting.sessionList.slice(
+                0,
+                newAppSetting.sessionList.length - 1
+              ),
+            ],
           });
         }}
       />

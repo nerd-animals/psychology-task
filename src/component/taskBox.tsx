@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { DIFF_FLAG, NONE_FLAG, SAME_FLAG, Session, Result } from '../lib/type';
 
 const SAME_FLAG_CODE = 'Slash';
@@ -36,6 +38,9 @@ export default function taskBox({
   const visibleTimer = useRef<number>();
   const { sessionIndex, taskList, solutionList } = session;
 
+  const notifyBackCount = () => {
+    toast(`${backCount + 1}번째부터 응답 가능합니다.`);
+  };
   const appendResult = () => {
     const result: Result = {
       sessionIndex,
@@ -113,7 +118,7 @@ export default function taskBox({
       if (index >= backCount) {
         displayResult();
       } else if (showSubmissionStatus) {
-        // todo: toast ui
+        notifyBackCount();
       }
     };
     window.addEventListener('keydown', onKeydown);
@@ -135,6 +140,14 @@ export default function taskBox({
           {isVisible ? taskList[index] : '+'}
         </div>
       )}
+      <ToastContainer
+        position="bottom-center"
+        limit={1}
+        hideProgressBar
+        closeOnClick={false}
+        autoClose={SHOW_SUBMISSION_STATUS_DURATION}
+        theme="light"
+      />
     </div>
   );
 }

@@ -30,7 +30,8 @@ export default function taskBox({
 }) {
   const [index, setIndex] = useState<number>(0);
   const [isVisible, setIsVisible] = useState<boolean>(true);
-  const [isSubmitted, setIsSubmitted] = useState<boolean>(true);
+  const [displaySubmissionStatus, setDisplaySubmissionStatus] =
+    useState<boolean>(false);
   const [color, setColor] = useState<string>('');
   const submittedAnswerRef = useRef<string | undefined>(undefined);
   const initialTimeRef = useRef<number>(window.performance.now());
@@ -87,9 +88,9 @@ export default function taskBox({
           index >= backCount &&
           submittedAnswerRef.current === undefined
         ) {
-          setIsSubmitted(false);
+          setDisplaySubmissionStatus(true);
           window.setTimeout(() => {
-            setIsSubmitted(true);
+            setDisplaySubmissionStatus(false);
             finalize();
           }, SHOW_SUBMISSION_STATUS_DURATION);
         } else {
@@ -105,7 +106,7 @@ export default function taskBox({
   useEffect(() => {
     const onKeydown = (e: KeyboardEvent) => {
       e.preventDefault();
-      if (submittedAnswerRef.current) return; //
+      if (submittedAnswerRef.current || displaySubmissionStatus) return;
 
       if (e.code === DIFF_FLAG_CODE) {
         submittedAnswerRef.current = DIFF_FLAG;
@@ -124,14 +125,14 @@ export default function taskBox({
     window.addEventListener('keydown', onKeydown);
 
     return () => window.removeEventListener('keydown', onKeydown);
-  }, [index]);
+  }, [index, displaySubmissionStatus]);
 
   return (
     <div
       className={`w-full min-h-screen flex items-center justify-center ${color}`}
     >
-      {isSubmitted === false && <div>응답하지 않았습니다.</div>}
-      {isSubmitted && (
+      {displaySubmissionStatus && <div>응답하지 않았습니다.</div>}
+      {displaySubmissionStatus === false && (
         <div
           style={{
             fontSize: 'min(20vw, 20vh)',

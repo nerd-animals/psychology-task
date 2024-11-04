@@ -18,7 +18,7 @@ export default function trial({
   // initialize
   useEffect(() => {
     if (trialSession.taskList.length === 0) {
-      setAppStep('final-trial');
+      setAppStep('pre-final-trial');
     }
 
     initialTimer.current = window.setTimeout(
@@ -31,7 +31,7 @@ export default function trial({
 
   useEffect(() => {
     if (isFinished) {
-      setAppStep('final-trial');
+      setAppStep('pre-final-trial');
     }
   }, [isFinished]);
 

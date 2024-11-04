@@ -6,6 +6,7 @@ import StandBy from './step/standBy';
 import Explain from './step/explain';
 import Trial from './step/trial';
 import FinalTrial from './step/finalTrial';
+import PreFinalTrial from './step/preFinalTrial';
 import PreTask from './step/preTask';
 import Task from './step/task';
 import PostTask from './step/postTask';
@@ -92,12 +93,19 @@ function App() {
         {appStep === 'trial' && (
           <Trial appSetting={appSettingRef.current} setAppStep={setAppStep} />
         )}
+        {appStep === 'pre-final-trial' && (
+          <PreFinalTrial
+            appSetting={appSettingRef.current}
+            setAppStep={setAppStep}
+          />
+        )}
         {appStep === 'final-trial' && (
           <FinalTrial
             appSetting={appSettingRef.current}
             setAppStep={setAppStep}
           />
         )}
+
         {appStep === 'pre-task' && (
           <PreTask appSetting={appSettingRef.current} setAppStep={setAppStep} />
         )}

@@ -142,6 +142,7 @@ export default function taskBox({
         </div>
       )}
       <ToastContainer
+        style={{ width: '40vw' }}
         position="bottom-center"
         limit={1}
         hideProgressBar

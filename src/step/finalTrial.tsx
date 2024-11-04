@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import TaskBox from '../component/taskBox';
 import { AppSetting, AppStep } from '../lib/type';
 
-export default function trial({
+export default function finalTrial({
   appSetting,
   setAppStep,
 }: {
@@ -18,7 +18,7 @@ export default function trial({
   // initialize
   useEffect(() => {
     if (trialSession.taskList.length === 0) {
-      setAppStep('final-trial');
+      setAppStep('pre-task');
     }
 
     initialTimer.current = window.setTimeout(
@@ -31,7 +31,7 @@ export default function trial({
 
   useEffect(() => {
     if (isFinished) {
-      setAppStep('final-trial');
+      setAppStep('pre-task');
     }
   }, [isFinished]);
 
@@ -46,9 +46,9 @@ export default function trial({
           backCount={backCount}
           waitTime={waitTime}
           visibleTime={visibleTime}
-          correctColor="bg-green-300"
-          wrongColor="bg-red-300"
-          showSubmissionStatus
+          correctColor="bg-gray-300"
+          wrongColor="bg-gray-300"
+          showSubmissionStatus={false}
           setIsFinished={setIsFinished}
           addResult={() => {}}
         />

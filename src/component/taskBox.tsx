@@ -3,6 +3,7 @@ import { DIFF_FLAG, NONE_FLAG, SAME_FLAG, Session, Result } from '../lib/type';
 
 const SAME_FLAG_CODE = 'Slash';
 const DIFF_FLAG_CODE = 'KeyZ';
+const SHOW_SUBMISSION_STATUS_DURATION = 1000;
 
 export default function taskBox({
   session,
@@ -11,6 +12,7 @@ export default function taskBox({
   visibleTime,
   correctColor,
   wrongColor,
+  showSubmissionStatus,
   setIsFinished,
   addResult,
 }: {
@@ -20,11 +22,13 @@ export default function taskBox({
   visibleTime: number;
   correctColor: string;
   wrongColor: string;
+  showSubmissionStatus: boolean;
   setIsFinished: (isFinished: boolean) => void;
   addResult: (result: Result) => void;
 }) {
   const [index, setIndex] = useState<number>(0);
   const [isVisible, setIsVisible] = useState<boolean>(true);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(true);
   const [color, setColor] = useState<string>('');
   const submittedAnswerRef = useRef<string | undefined>(undefined);
   const initialTimeRef = useRef<number>(window.performance.now());
@@ -52,6 +56,17 @@ export default function taskBox({
     }
   };
 
+  const finalize = () => {
+    appendResult();
+    setIsVisible(true);
+    setIndex((prev) => prev + 1);
+    setColor('');
+
+    initialTimeRef.current = window.performance.now();
+    submittedAnswerRef.current = undefined;
+    durationRef.current = -1;
+  };
+
   useEffect(() => {
     if (index >= taskList.length) {
       setIsFinished(true);
@@ -62,13 +77,19 @@ export default function taskBox({
       setIsVisible(false);
 
       visibleTimer.current = window.setTimeout(() => {
-        appendResult();
-        setIsVisible(true);
-        setIndex((prev) => prev + 1);
-        setColor('');
-        initialTimeRef.current = window.performance.now();
-        submittedAnswerRef.current = undefined;
-        durationRef.current = -1;
+        if (
+          showSubmissionStatus &&
+          index >= backCount &&
+          submittedAnswerRef.current === undefined
+        ) {
+          setIsSubmitted(false);
+          window.setTimeout(() => {
+            setIsSubmitted(true);
+            finalize();
+          }, SHOW_SUBMISSION_STATUS_DURATION);
+        } else {
+          finalize();
+        }
       }, waitTime);
     }, visibleTime);
 
@@ -91,6 +112,8 @@ export default function taskBox({
 
       if (index >= backCount) {
         displayResult();
+      } else if (showSubmissionStatus) {
+        // todo: toast ui
       }
     };
     window.addEventListener('keydown', onKeydown);
@@ -101,11 +124,17 @@ export default function taskBox({
   return (
     <div
       className={`w-full min-h-screen flex items-center justify-center ${color}`}
-      style={{
-        fontSize: 'min(20vw, 20vh)',
-      }}
     >
-      {isVisible ? taskList[index] : '+'}
+      {isSubmitted === false && <div>응답하지 않았습니다.</div>}
+      {isSubmitted && (
+        <div
+          style={{
+            fontSize: 'min(20vw, 20vh)',
+          }}
+        >
+          {isVisible ? taskList[index] : '+'}
+        </div>
+      )}
     </div>
   );
 }

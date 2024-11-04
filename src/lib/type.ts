@@ -9,6 +9,7 @@ export type AppStep =
   | 'stand-by'
   | 'explain'
   | 'trial'
+  | 'final-trial'
   | 'pre-task'
   | 'task'
   | 'post-task';

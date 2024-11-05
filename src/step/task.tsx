@@ -68,6 +68,7 @@ export default function task({
           visibleTime={visibleTime}
           correctColor="bg-gray-300"
           wrongColor="bg-gray-300"
+          showSubmissionStatus={false}
           setIsFinished={setIsFinished}
           addResult={addResult}
         />

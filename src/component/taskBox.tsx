@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { DIFF_FLAG, NONE_FLAG, SAME_FLAG, Session, Result } from '../lib/type';
 
 const SAME_FLAG_CODE = 'Slash';
 const DIFF_FLAG_CODE = 'KeyZ';
+const SHOW_SUBMISSION_STATUS_DURATION = 1000;
 
 export default function taskBox({
   session,
@@ -11,6 +14,7 @@ export default function taskBox({
   visibleTime,
   correctColor,
   wrongColor,
+  showSubmissionStatus,
   setIsFinished,
   addResult,
 }: {
@@ -20,11 +24,14 @@ export default function taskBox({
   visibleTime: number;
   correctColor: string;
   wrongColor: string;
+  showSubmissionStatus: boolean;
   setIsFinished: (isFinished: boolean) => void;
   addResult: (result: Result) => void;
 }) {
   const [index, setIndex] = useState<number>(0);
   const [isVisible, setIsVisible] = useState<boolean>(true);
+  const [displaySubmissionStatus, setDisplaySubmissionStatus] =
+    useState<boolean>(false);
   const [color, setColor] = useState<string>('');
   const submittedAnswerRef = useRef<string | undefined>(undefined);
   const initialTimeRef = useRef<number>(window.performance.now());
@@ -32,6 +39,9 @@ export default function taskBox({
   const visibleTimer = useRef<number>();
   const { sessionIndex, taskList, solutionList } = session;
 
+  const notifyBackCount = () => {
+    toast(`${backCount + 1}번째부터 응답 가능합니다.`);
+  };
   const appendResult = () => {
     const result: Result = {
       sessionIndex,
@@ -52,6 +62,17 @@ export default function taskBox({
     }
   };
 
+  const finalize = () => {
+    appendResult();
+    setIsVisible(true);
+    setIndex((prev) => prev + 1);
+    setColor('');
+
+    initialTimeRef.current = window.performance.now();
+    submittedAnswerRef.current = undefined;
+    durationRef.current = -1;
+  };
+
   useEffect(() => {
     if (index >= taskList.length) {
       setIsFinished(true);
@@ -62,13 +83,19 @@ export default function taskBox({
       setIsVisible(false);
 
       visibleTimer.current = window.setTimeout(() => {
-        appendResult();
-        setIsVisible(true);
-        setIndex((prev) => prev + 1);
-        setColor('');
-        initialTimeRef.current = window.performance.now();
-        submittedAnswerRef.current = undefined;
-        durationRef.current = -1;
+        if (
+          showSubmissionStatus &&
+          index >= backCount &&
+          submittedAnswerRef.current === undefined
+        ) {
+          setDisplaySubmissionStatus(true);
+          window.setTimeout(() => {
+            setDisplaySubmissionStatus(false);
+            finalize();
+          }, SHOW_SUBMISSION_STATUS_DURATION);
+        } else {
+          finalize();
+        }
       }, waitTime);
     }, visibleTime);
 
@@ -79,7 +106,7 @@ export default function taskBox({
   useEffect(() => {
     const onKeydown = (e: KeyboardEvent) => {
       e.preventDefault();
-      if (submittedAnswerRef.current) return; //
+      if (submittedAnswerRef.current || displaySubmissionStatus) return;
 
       if (e.code === DIFF_FLAG_CODE) {
         submittedAnswerRef.current = DIFF_FLAG;
@@ -91,21 +118,38 @@ export default function taskBox({
 
       if (index >= backCount) {
         displayResult();
+      } else if (showSubmissionStatus) {
+        notifyBackCount();
       }
     };
     window.addEventListener('keydown', onKeydown);
 
     return () => window.removeEventListener('keydown', onKeydown);
-  }, [index]);
+  }, [index, displaySubmissionStatus]);
 
   return (
     <div
       className={`w-full min-h-screen flex items-center justify-center ${color}`}
-      style={{
-        fontSize: 'min(20vw, 20vh)',
-      }}
     >
-      {isVisible ? taskList[index] : '+'}
+      {displaySubmissionStatus && <div>응답하지 않았습니다.</div>}
+      {displaySubmissionStatus === false && (
+        <div
+          style={{
+            fontSize: 'min(20vw, 20vh)',
+          }}
+        >
+          {isVisible ? taskList[index] : '+'}
+        </div>
+      )}
+      <ToastContainer
+        style={{ width: '40vw' }}
+        position="bottom-center"
+        limit={1}
+        hideProgressBar
+        closeOnClick={false}
+        autoClose={SHOW_SUBMISSION_STATUS_DURATION}
+        theme="light"
+      />
     </div>
   );
 }

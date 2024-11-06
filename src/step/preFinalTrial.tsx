@@ -1,15 +1,11 @@
 import React from 'react';
-import { AppStep, AppSetting } from '../lib/type';
+import { AppStep } from '../lib/type';
 
 export default function preFinalTrial({
-  appSetting,
   setAppStep,
 }: {
-  appSetting: AppSetting;
   setAppStep: React.Dispatch<React.SetStateAction<AppStep>>;
 }) {
-  const { backCount } = appSetting;
-
   return (
     <div className="flex flex-col items-center justify-center w-full space-y-4">
       <p>지금부터 본 과제와 동일한 방식으로 연습을 시작하겠습니다.</p>

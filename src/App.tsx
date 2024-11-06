@@ -94,10 +94,7 @@ function App() {
           <Trial appSetting={appSettingRef.current} setAppStep={setAppStep} />
         )}
         {appStep === 'pre-final-trial' && (
-          <PreFinalTrial
-            appSetting={appSettingRef.current}
-            setAppStep={setAppStep}
-          />
+          <PreFinalTrial setAppStep={setAppStep} />
         )}
         {appStep === 'final-trial' && (
           <FinalTrial

@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/psychology-task/static/css/main.2c190799.css",
-    "main.js": "/psychology-task/static/js/main.bcff1d7c.js",
+    "main.js": "/psychology-task/static/js/main.dcde1c01.js",
     "index.html": "/psychology-task/index.html",
     "main.2c190799.css.map": "/psychology-task/static/css/main.2c190799.css.map",
-    "main.bcff1d7c.js.map": "/psychology-task/static/js/main.bcff1d7c.js.map"
+    "main.dcde1c01.js.map": "/psychology-task/static/js/main.dcde1c01.js.map"
   },
   "entrypoints": [
     "static/css/main.2c190799.css",
-    "static/js/main.bcff1d7c.js"
+    "static/js/main.dcde1c01.js"
   ]
 }

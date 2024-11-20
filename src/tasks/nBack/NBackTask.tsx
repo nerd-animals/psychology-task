@@ -11,37 +11,10 @@ import PreTask from './step/preTask';
 import Task from './step/task';
 import PostTask from './step/postTask';
 import Setting from './step/setting';
-import Container from './component/container';
-import { AppSetting, AppStep, Subject, Result } from './lib/type';
+import Container from './component/Container';
+import { TaskSetting, TaskStep, Subject, Result } from './lib/type';
 import { solveSession } from './lib/util';
-
-const INITIAL_APP_SETTING: AppSetting = {
-  backCount: 3,
-  initializeTime: 5000,
-  visibleTime: 500,
-  waitTime: 2000,
-  sessionChangeTime: 5000,
-  trialSession: {
-    id: 'trial',
-    sessionIndex: 0,
-    taskList: [2, 1, 8, 5, 1, 7],
-    solutionList: [],
-  },
-  sessionList: [
-    {
-      id: uuid(),
-      sessionIndex: 0,
-      taskList: [3, 5, 7, 4, 6, 7],
-      solutionList: [],
-    },
-    {
-      id: uuid(),
-      sessionIndex: 1,
-      taskList: [9, 4, 3, 5, 4, 7],
-      solutionList: [],
-    },
-  ],
-};
+import useTaskStore from './store/taskStore';
 
 const INITIAL_SUBJECT: Subject = {
   subjectLabel: '',
@@ -51,88 +24,36 @@ const INITIAL_SUBJECT: Subject = {
 const NO_CURSOR_STEP = ['task', 'trial'];
 
 export default function NBackTask() {
-  const [appStep, setAppStep] = useState<AppStep>('home');
+  const step = useTaskStore((state) => state.taskStep);
+  const solveTask = useTaskStore((state) => state.solveTask);
+
   const subjectRef = useRef<Subject>(INITIAL_SUBJECT);
-  const appSettingRef = useRef<AppSetting>(INITIAL_APP_SETTING);
-  const resultRef = useRef<Result[]>([]);
-  const cursorOption = NO_CURSOR_STEP.includes(appStep) ? 'cursor-none' : '';
+  const cursorOption = NO_CURSOR_STEP.includes(step) ? 'cursor-none' : '';
 
   useEffect(() => {
-    const solvedTrialSession = solveSession(
-      appSettingRef.current.backCount,
-      appSettingRef.current.trialSession
-    );
-    const solvedSessionList = appSettingRef.current.sessionList.map((session) =>
-      solveSession(appSettingRef.current.backCount, session)
-    );
-
-    appSettingRef.current.trialSession = { ...solvedTrialSession };
-    appSettingRef.current.sessionList = [...solvedSessionList];
+    solveTask();
   }, []);
 
   return (
     <main className={`${cursorOption}`}>
       <Container>
-        {appStep === 'home' && (
-          <Home appSetting={appSettingRef.current} setAppStep={setAppStep} />
-        )}
-        {appStep === 'setup' && (
+        {step === 'home' && <Home />}
+        {step === 'setup' && (
           <Setup
             setSubject={(subject: Subject) => {
               subjectRef.current = subject;
             }}
-            setAppStep={setAppStep}
           />
         )}
-        {appStep === 'stand-by' && (
-          <StandBy subject={subjectRef.current} setAppStep={setAppStep} />
-        )}
-        {appStep === 'explain' && (
-          <Explain appSetting={appSettingRef.current} setAppStep={setAppStep} />
-        )}
-        {appStep === 'trial' && (
-          <Trial appSetting={appSettingRef.current} setAppStep={setAppStep} />
-        )}
-        {appStep === 'pre-final-trial' && (
-          <PreFinalTrial setAppStep={setAppStep} />
-        )}
-        {appStep === 'final-trial' && (
-          <FinalTrial
-            appSetting={appSettingRef.current}
-            setAppStep={setAppStep}
-          />
-        )}
-
-        {appStep === 'pre-task' && (
-          <PreTask appSetting={appSettingRef.current} setAppStep={setAppStep} />
-        )}
-        {appStep === 'task' && (
-          <Task
-            appSetting={appSettingRef.current}
-            addResult={(result: Result) => resultRef.current.push(result)}
-            setAppStep={setAppStep}
-          />
-        )}
-        {appStep === 'post-task' && (
-          <PostTask
-            appSetting={appSettingRef.current}
-            subject={subjectRef.current}
-            resultList={resultRef.current}
-            clearResultList={() => {
-              resultRef.current = [];
-            }}
-            setAppStep={setAppStep}
-          />
-        )}
-        {appStep === 'setting' && (
-          <Setting
-            appSetting={appSettingRef.current}
-            setAppSetting={(appSetting: AppSetting) => {
-              appSettingRef.current = appSetting;
-            }}
-            setAppStep={setAppStep}
-          />
-        )}
+        {step === 'stand-by' && <StandBy subject={subjectRef.current} />}
+        {step === 'explain' && <Explain />}
+        {step === 'trial' && <Trial />}
+        {step === 'pre-final-trial' && <PreFinalTrial />}
+        {step === 'final-trial' && <FinalTrial />}
+        {step === 'pre-task' && <PreTask />}
+        {step === 'task' && <Task />}
+        {step === 'post-task' && <PostTask subject={subjectRef.current} />}
+        {step === 'setting' && <Setting />}
       </Container>
     </main>
   );

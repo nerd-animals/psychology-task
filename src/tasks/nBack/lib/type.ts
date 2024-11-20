@@ -2,7 +2,7 @@ export const DIFF_FLAG = 'diff';
 export const SAME_FLAG = 'same';
 export const NONE_FLAG = '-';
 
-export type AppStep =
+export type TaskStep =
   | 'home'
   | 'setting'
   | 'setup'
@@ -22,13 +22,13 @@ export interface Session {
   solutionList: string[];
 }
 
-export interface AppSetting {
+export interface TaskSetting {
   backCount: number;
   initializeTime: number; // ms
   visibleTime: number; // ms
   waitTime: number; // ms
   sessionChangeTime: number; // ms
-  trialSession: Session;
+  trialSessionList: Session[];
   sessionList: Session[];
 }
 

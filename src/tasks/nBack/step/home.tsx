@@ -1,20 +1,25 @@
 import React, { useState } from 'react';
-import { AppStep, AppSetting } from '../lib/type';
 import Button from '../component/button';
 import Modal from '../component/modal';
+import useTaskStore from '../store/taskStore';
 
-export default function home({
-  appSetting,
-  setAppStep,
-}: {
-  appSetting: AppSetting;
-  setAppStep: React.Dispatch<React.SetStateAction<AppStep>>;
-}) {
+export default function home() {
+  const taskSetting = useTaskStore((state) => state.taskSetting);
+  const setTaskStep = useTaskStore((state) => state.setTaskStep);
+
   const [isModalOpen, setIsModelOpen] = useState<boolean>(false);
   const isReady = () => {
-    if (appSetting.trialSession.taskList.length === 0) return false;
-    if (appSetting.sessionList.length === 0) return false;
-    if (appSetting.sessionList.some((session) => session.taskList.length === 0))
+    if (taskSetting.trialSessionList.length === 0) return false;
+    if (
+      taskSetting.trialSessionList.some(
+        (session) => session.taskList.length === 0
+      )
+    )
+      return false;
+    if (taskSetting.sessionList.length === 0) return false;
+    if (
+      taskSetting.sessionList.some((session) => session.taskList.length === 0)
+    )
       return false;
     return true;
   };
@@ -36,13 +41,13 @@ export default function home({
             label="Start"
             onClick={() => {
               if (isReady()) {
-                setAppStep('setup');
+                setTaskStep('setup');
               } else {
                 setIsModelOpen(true);
               }
             }}
           />
-          <Button label="Setting" onClick={() => setAppStep('setting')} />
+          <Button label="Setting" onClick={() => setTaskStep('setting')} />
         </div>
       </div>
     </>

@@ -1,24 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
 import TaskBox from '../component/taskBox';
-import { AppSetting, AppStep } from '../lib/type';
+import useTaskStore from '../store/taskStore';
 
-export default function finalTrial({
-  appSetting,
-  setAppStep,
-}: {
-  appSetting: AppSetting;
-  setAppStep: React.Dispatch<React.SetStateAction<AppStep>>;
-}) {
-  const { backCount, trialSession, initializeTime, waitTime, visibleTime } =
-    appSetting;
+export default function finalTrial() {
+  const taskSetting = useTaskStore((state) => state.taskSetting);
+  const setTaskStep = useTaskStore((state) => state.setTaskStep);
+  const { backCount, trialSessionList, initializeTime, waitTime, visibleTime } =
+    taskSetting;
   const [isFinished, setIsFinished] = useState<boolean>(false);
   const [isInitailized, setIsInitailized] = useState<boolean>(false);
   const initialTimer = useRef<number>();
 
   // initialize
   useEffect(() => {
-    if (trialSession.taskList.length === 0) {
-      setAppStep('pre-task');
+    if (trialSessionList[0].taskList.length === 0) {
+      setTaskStep('pre-task');
     }
 
     initialTimer.current = window.setTimeout(
@@ -31,7 +27,7 @@ export default function finalTrial({
 
   useEffect(() => {
     if (isFinished) {
-      setAppStep('pre-task');
+      setTaskStep('pre-task');
     }
   }, [isFinished]);
 
@@ -42,7 +38,7 @@ export default function finalTrial({
       )}
       {isInitailized && (
         <TaskBox
-          session={trialSession}
+          session={trialSessionList[0]}
           backCount={backCount}
           waitTime={waitTime}
           visibleTime={visibleTime}

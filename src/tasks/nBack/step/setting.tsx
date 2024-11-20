@@ -1,44 +1,29 @@
 import React, { ChangeEvent, useState } from 'react';
 import { v4 as uuid } from 'uuid';
-import { AppSetting, AppStep, Session } from '../lib/type';
-import { solveSession } from '../lib/util';
+import { TaskSetting, Session } from '../lib/type';
 import Button from '../component/button';
+import useTaskStore from '../store/taskStore';
 
 const VALID_BACK_COUNT = [2, 3, 4];
 
-export default function setting({
-  appSetting,
-  setAppSetting,
-  setAppStep,
-}: {
-  appSetting: AppSetting;
-  setAppSetting: (s: AppSetting) => void;
-  setAppStep: React.Dispatch<React.SetStateAction<AppStep>>;
-}) {
-  const [newAppSetting, setNewAppSetting] = useState<AppSetting>({
-    ...appSetting,
+export default function setting() {
+  const taskSetting = useTaskStore((state) => state.taskSetting);
+  const setTaskSetting = useTaskStore((state) => state.setTaskSetting);
+  const solveTask = useTaskStore((state) => state.solveTask);
+  const setTaskStep = useTaskStore((state) => state.setTaskStep);
+  const [newTaskSetting, setNewTaskSetting] = useState<TaskSetting>({
+    ...taskSetting,
   });
 
   return (
-    <div className="space-y-4 w-full max-w-md">
+    <div className="w-full max-w-md space-y-4">
       <div className="flex justify-between">
-        <Button label="home" onClick={() => setAppStep('home')} />
+        <Button label="home" onClick={() => setTaskStep('home')} />
         <Button
           label="save"
           onClick={() => {
-            const solvedTrialSession = solveSession(
-              newAppSetting.backCount,
-              newAppSetting.trialSession
-            );
-            const solvedSessionList = newAppSetting.sessionList.map((session) =>
-              solveSession(newAppSetting.backCount, session)
-            );
-
-            setAppSetting({
-              ...newAppSetting,
-              trialSession: { ...solvedTrialSession },
-              sessionList: [...solvedSessionList],
-            });
+            setTaskSetting(newTaskSetting);
+            solveTask();
           }}
         />
       </div>
@@ -46,11 +31,11 @@ export default function setting({
         <div>back count</div>
         <input
           type="number"
-          value={newAppSetting.backCount}
+          value={newTaskSetting.backCount}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             const value = e.target.valueAsNumber || 0;
             if (VALID_BACK_COUNT.includes(value)) {
-              setNewAppSetting({ ...newAppSetting, backCount: value });
+              setNewTaskSetting({ ...newTaskSetting, backCount: value });
             } else {
               // alert
             }
@@ -61,10 +46,10 @@ export default function setting({
         <div>initializeTime(ms)</div>
         <input
           type="number"
-          value={newAppSetting.initializeTime}
+          value={newTaskSetting.initializeTime}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             const value = e.target.valueAsNumber || 0;
-            setNewAppSetting({ ...newAppSetting, initializeTime: value });
+            setNewTaskSetting({ ...newTaskSetting, initializeTime: value });
           }}
         />
       </div>
@@ -72,10 +57,10 @@ export default function setting({
         <div>sessionChangeTime(ms)</div>
         <input
           type="number"
-          value={newAppSetting.sessionChangeTime}
+          value={newTaskSetting.sessionChangeTime}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             const value = e.target.valueAsNumber || 0;
-            setNewAppSetting({ ...newAppSetting, sessionChangeTime: value });
+            setNewTaskSetting({ ...newTaskSetting, sessionChangeTime: value });
           }}
         />
       </div>
@@ -83,10 +68,10 @@ export default function setting({
         <div>visibleTime(ms)</div>
         <input
           type="number"
-          value={newAppSetting.visibleTime}
+          value={newTaskSetting.visibleTime}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             const value = e.target.valueAsNumber || 0;
-            setNewAppSetting({ ...newAppSetting, visibleTime: value });
+            setNewTaskSetting({ ...newTaskSetting, visibleTime: value });
           }}
         />
       </div>
@@ -94,34 +79,45 @@ export default function setting({
         <div>waitTime(ms)</div>
         <input
           type="number"
-          value={newAppSetting.waitTime}
+          value={newTaskSetting.waitTime}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             const value = e.target.valueAsNumber || 0;
-            setNewAppSetting({ ...newAppSetting, waitTime: value });
+            setNewTaskSetting({ ...newTaskSetting, waitTime: value });
           }}
         />
       </div>
-      <div className="flex grid grid-cols-2 space-x-2">
-        <div>trial session</div>
-        <input
-          type="string"
-          placeholder="trial"
-          defaultValue={newAppSetting.trialSession.taskList.join(',')}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            const valueList = e.target.value
-              .split(',')
-              .filter((x) => x.trim() !== '' && !Number.isNaN(Number(x)));
-            setNewAppSetting({
-              ...newAppSetting,
-              trialSession: {
-                ...newAppSetting.trialSession,
-                taskList: [...valueList.map((x) => parseInt(x, 10))],
-              },
-            });
-          }}
-        />
-      </div>
-      {newAppSetting.sessionList.map((session: Session, index) => (
+      {newTaskSetting.trialSessionList.map((session: Session, index) => (
+        <div key={session.id} className="flex grid grid-cols-2 space-x-2">
+          <div>{`${index + 1}번째 trial session`}</div>
+          <input
+            type="string"
+            defaultValue={session.taskList.join(',')}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              const valueList = e.target.value
+                .split(',')
+                .filter((x) => x.trim() !== '' && !Number.isNaN(Number(x)));
+
+              const originSession: Session = newTaskSetting.sessionList[index];
+              const newSession: Session = {
+                ...originSession,
+                taskList: valueList.map((value) => parseInt(value, 10)),
+              };
+
+              const newSessionList: Session[] = [
+                ...newTaskSetting.sessionList.slice(0, index),
+                { ...newSession },
+                ...newTaskSetting.sessionList.slice(index + 1),
+              ];
+
+              setNewTaskSetting({
+                ...newTaskSetting,
+                sessionList: newSessionList,
+              });
+            }}
+          />
+        </div>
+      ))}
+      {newTaskSetting.sessionList.map((session: Session, index) => (
         <div key={session.id} className="flex grid grid-cols-2 space-x-2">
           <div>{`${index + 1}번째 session`}</div>
           <input
@@ -132,20 +128,20 @@ export default function setting({
                 .split(',')
                 .filter((x) => x.trim() !== '' && !Number.isNaN(Number(x)));
 
-              const originSession: Session = newAppSetting.sessionList[index];
+              const originSession: Session = newTaskSetting.sessionList[index];
               const newSession: Session = {
                 ...originSession,
                 taskList: valueList.map((value) => parseInt(value, 10)),
               };
 
               const newSessionList: Session[] = [
-                ...newAppSetting.sessionList.slice(0, index),
+                ...newTaskSetting.sessionList.slice(0, index),
                 { ...newSession },
-                ...newAppSetting.sessionList.slice(index + 1),
+                ...newTaskSetting.sessionList.slice(index + 1),
               ];
 
-              setNewAppSetting({
-                ...newAppSetting,
+              setNewTaskSetting({
+                ...newTaskSetting,
                 sessionList: newSessionList,
               });
             }}
@@ -155,13 +151,13 @@ export default function setting({
       <Button
         label="add Session"
         onClick={() =>
-          setNewAppSetting({
-            ...newAppSetting,
+          setNewTaskSetting({
+            ...newTaskSetting,
             sessionList: [
-              ...newAppSetting.sessionList,
+              ...newTaskSetting.sessionList,
               {
                 id: uuid(),
-                sessionIndex: newAppSetting.sessionList.length,
+                sessionIndex: newTaskSetting.sessionList.length,
                 taskList: [],
                 solutionList: [],
               },
@@ -172,12 +168,12 @@ export default function setting({
       <Button
         label="remove Last Session"
         onClick={() => {
-          setNewAppSetting({
-            ...newAppSetting,
+          setNewTaskSetting({
+            ...newTaskSetting,
             sessionList: [
-              ...newAppSetting.sessionList.slice(
+              ...newTaskSetting.sessionList.slice(
                 0,
-                newAppSetting.sessionList.length - 1
+                newTaskSetting.sessionList.length - 1
               ),
             ],
           });

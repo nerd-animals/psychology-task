@@ -1,14 +1,14 @@
 import React, { ChangeEvent, useRef } from 'react';
-import { AppStep, Subject } from '../lib/type';
+import { Subject } from '../lib/type';
 import Button from '../component/button';
+import useTaskStore from '../store/taskStore';
 
 export default function setup({
   setSubject,
-  setAppStep,
 }: {
   setSubject: (subject: Subject) => void;
-  setAppStep: React.Dispatch<React.SetStateAction<AppStep>>;
 }) {
+  const setTaskStep = useTaskStore((state) => state.setTaskStep);
   const inputRef = useRef<string>('');
 
   const initializeSubject = () => {
@@ -37,7 +37,7 @@ export default function setup({
         label="설정 완료"
         onClick={() => {
           initializeSubject();
-          setAppStep('stand-by');
+          setTaskStep('stand-by');
         }}
       />
     </div>

@@ -1,17 +1,14 @@
 import React, { useState } from 'react';
 import { v4 as uuid } from 'uuid';
-import { AppSetting, AppStep } from '../lib/type';
+import useTaskStore from '../store/taskStore';
 
 const EXAMPLE = [2, 8, 2, 2, 7]; // only for 2, 3 case
 
-export default function explain({
-  appSetting,
-  setAppStep,
-}: {
-  appSetting: AppSetting;
-  setAppStep: React.Dispatch<React.SetStateAction<AppStep>>;
-}) {
-  const { backCount } = appSetting;
+export default function explain() {
+  const setTaskStep = useTaskStore((state) => state.setTaskStep);
+  const taskSetting = useTaskStore((state) => state.taskSetting);
+
+  const { backCount } = taskSetting;
   const [index, setIndex] = useState<number>(0);
 
   const explainList = [
@@ -62,16 +59,16 @@ export default function explain({
           다음은 {EXAMPLE.join('-')} 순으로 숫자가 제시되었을 경우에 대한
           예시입니다.
         </p>
-        <div className="flex justify-center items-center space-x-4">
+        <div className="flex items-center justify-center space-x-4">
           {EXAMPLE.map((number, i) => (
             <div className="flex flex-col items-center justify-center space-y-2">
               <div
                 key={uuid()}
                 className={`flex flex-col items-center justify-center border border-gray-300 rounded-lg ${i < backCount ? 'bg-gray-300' : ''}`}
               >
-                <div className="text-sm px-1 my-3">{`${i + 1}번째 숫자`}</div>
+                <div className="px-1 my-3 text-sm">{`${i + 1}번째 숫자`}</div>
                 <div className="w-full h-0.5 bg-gray-400 my-1" />
-                <div className="text-lg py-5 font-semibold">{number}</div>
+                <div className="py-5 text-lg font-semibold">{number}</div>
               </div>
               <img
                 src={`${process.env.PUBLIC_URL}/images/arrow-up.png`}
@@ -103,16 +100,16 @@ export default function explain({
           다음은 {EXAMPLE.join('-')} 순으로 숫자가 제시되었을 경우에 대한
           예시입니다.
         </p>
-        <div className="flex justify-center items-center space-x-4">
+        <div className="flex items-center justify-center space-x-4">
           {EXAMPLE.map((number, i) => (
             <div className="flex flex-col items-center justify-center space-y-2">
               <div
                 key={uuid()}
                 className={`flex flex-col items-center justify-center border border-gray-300 rounded-lg ${i === idx || i === idx - backCount ? bgColor : ''}`}
               >
-                <div className="text-sm px-1 my-3">{`${i + 1}번째 숫자`}</div>
+                <div className="px-1 my-3 text-sm">{`${i + 1}번째 숫자`}</div>
                 <div className="w-full h-0.5 bg-gray-400 my-1" />
-                <div className="text-lg py-5 font-semibold">{number}</div>
+                <div className="py-5 text-lg font-semibold">{number}</div>
               </div>{' '}
               <img
                 src={`${process.env.PUBLIC_URL}/images/arrow-up.png`}
@@ -153,8 +150,8 @@ export default function explain({
       <div className="flex items-center justify-center">
         <button
           type="button"
-          className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600"
-          onClick={() => setAppStep('trial')}
+          className="px-4 py-2 text-white bg-gray-500 rounded hover:bg-gray-600"
+          onClick={() => setTaskStep('trial')}
         >
           연습 과제 시작하기
         </button>
@@ -165,12 +162,12 @@ export default function explain({
   return (
     <div className="flex flex-col justify-between w-full h-full">
       {/* 중간 설명 영역 (스크롤 가능) */}
-      <div className="flex-grow overflow-y-auto my-4 px-4 flex flex-col items-center text-center">
+      <div className="flex flex-col items-center flex-grow px-4 my-4 overflow-y-auto text-center">
         {explainList[index]()}
       </div>
 
       {/* 하단 좌우 버튼 */}
-      <div className="flex justify-between px-4 py-2 absolute bottom-2 left-1 right-1">
+      <div className="absolute flex justify-between px-4 py-2 bottom-2 left-1 right-1">
         <button
           type="button"
           className={`bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 ${index === 0 ? 'invisible' : ''}`}

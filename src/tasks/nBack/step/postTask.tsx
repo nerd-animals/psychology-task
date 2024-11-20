@@ -1,21 +1,14 @@
 import React, { useEffect } from 'react';
 import { CSVDownload } from 'react-csv';
-import { AppSetting, AppStep, Subject, Result } from '../lib/type';
+import { TaskSetting, TaskStep, Subject, Result } from '../lib/type';
 import Button from '../component/button';
+import useTaskStore from '../store/taskStore';
 
-export default function postTask({
-  appSetting,
-  subject,
-  resultList,
-  clearResultList,
-  setAppStep,
-}: {
-  appSetting: AppSetting;
-  subject: Subject;
-  resultList: Result[];
-  clearResultList: () => void;
-  setAppStep: React.Dispatch<React.SetStateAction<AppStep>>;
-}) {
+export default function postTask({ subject }: { subject: Subject }) {
+  const taskSetting = useTaskStore((state) => state.taskSetting);
+  const setTaskStep = useTaskStore((state) => state.setTaskStep);
+  const resultList = useTaskStore((state) => state.resultList);
+  const clearResultList = useTaskStore((state) => state.clearResult);
   useEffect(() => {
     clearResultList();
   }, []);
@@ -30,11 +23,11 @@ export default function postTask({
           data={resultList.map((result) => ({
             name: subject.subjectLabel,
             date: subject.date.toLocaleString(),
-            backCount: appSetting.backCount,
-            initializeTime: appSetting.initializeTime,
-            sessionChangeTime: appSetting.sessionChangeTime,
-            visibleTime: appSetting.visibleTime,
-            waitTime: appSetting.waitTime,
+            backCount: taskSetting.backCount,
+            initializeTime: taskSetting.initializeTime,
+            sessionChangeTime: taskSetting.sessionChangeTime,
+            visibleTime: taskSetting.visibleTime,
+            waitTime: taskSetting.waitTime,
             ...result,
             sessionIndex: result.sessionIndex + 1,
             taskIndex: result.taskIndex + 1,
@@ -43,7 +36,7 @@ export default function postTask({
           target="_blank"
         />
       )}
-      <Button label="메인으로 돌아가기" onClick={() => setAppStep('home')} />
+      <Button label="메인으로 돌아가기" onClick={() => setTaskStep('home')} />
     </div>
   );
 }

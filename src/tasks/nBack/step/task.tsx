@@ -1,16 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Result, AppSetting, AppStep } from '../lib/type';
 import TaskBox from '../component/taskBox';
+import useTaskStore from '../store/taskStore';
 
-export default function task({
-  appSetting,
-  addResult,
-  setAppStep,
-}: {
-  appSetting: AppSetting;
-  addResult: (result: Result) => void;
-  setAppStep: React.Dispatch<React.SetStateAction<AppStep>>;
-}) {
+export default function task() {
+  const taskSetting = useTaskStore((state) => state.taskSetting);
+  const setTaskStep = useTaskStore((state) => state.setTaskStep);
+  const addResult = useTaskStore((state) => state.addResult);
   const {
     sessionList,
     backCount,
@@ -18,7 +13,7 @@ export default function task({
     waitTime,
     visibleTime,
     sessionChangeTime,
-  } = appSetting;
+  } = taskSetting;
   const [isInitailized, setIsInitailized] = useState<boolean>(false);
   const [isFinished, setIsFinished] = useState<boolean>(false);
   const [sessionIndex, setSessionIndex] = useState<number>(0);
@@ -46,7 +41,7 @@ export default function task({
         setIsFinished(false);
       }, sessionChangeTime);
     } else {
-      setAppStep('post-task');
+      setTaskStep('post-task');
     }
 
     return () => window.clearTimeout(sessionTimer.current);

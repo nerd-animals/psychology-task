@@ -1,11 +1,9 @@
 import React from 'react';
-import { AppStep } from '../lib/type';
+import useTaskStore from '../store/taskStore';
 
-export default function preFinalTrial({
-  setAppStep,
-}: {
-  setAppStep: React.Dispatch<React.SetStateAction<AppStep>>;
-}) {
+export default function preFinalTrial() {
+  const setTaskStep = useTaskStore((state) => state.setTaskStep);
+
   return (
     <div className="flex flex-col items-center justify-center w-full space-y-4">
       <p>지금부터 본 과제와 동일한 방식으로 연습을 시작하겠습니다.</p>
@@ -16,8 +14,8 @@ export default function preFinalTrial({
       <div className="flex items-center justify-center">
         <button
           type="button"
-          className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600"
-          onClick={() => setAppStep('final-trial')}
+          className="px-4 py-2 text-white bg-gray-500 rounded hover:bg-gray-600"
+          onClick={() => setTaskStep('final-trial')}
         >
           연습 과제 시작하기
         </button>

@@ -1,14 +1,10 @@
 import React from 'react';
-import { AppStep, AppSetting } from '../lib/type';
+import useTaskStore from '../store/taskStore';
 
-export default function preTask({
-  appSetting,
-  setAppStep,
-}: {
-  appSetting: AppSetting;
-  setAppStep: React.Dispatch<React.SetStateAction<AppStep>>;
-}) {
-  const { backCount } = appSetting;
+export default function preTask() {
+  const taskSetting = useTaskStore((state) => state.taskSetting);
+  const setTaskStep = useTaskStore((state) => state.setTaskStep);
+  const { backCount } = taskSetting;
 
   return (
     <div className="flex flex-col items-center justify-center w-full space-y-4">
@@ -20,7 +16,7 @@ export default function preTask({
         일련의 숫자가 제시되면 {backCount + 1}번째 숫자부터 아래의 키를
         눌러주세요.
       </p>
-      <ul className="list-disc pl-5">
+      <ul className="pl-5 list-disc">
         <li>
           &quot;/&quot; : 현재 화면에 표시된 숫자가 {backCount}번째 전에 제시된
           숫자와 같을 때
@@ -36,8 +32,8 @@ export default function preTask({
       <div className="flex items-center justify-center">
         <button
           type="button"
-          className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600"
-          onClick={() => setAppStep('task')}
+          className="px-4 py-2 text-white bg-gray-500 rounded hover:bg-gray-600"
+          onClick={() => setTaskStep('task')}
         >
           본 과제 시작하기
         </button>

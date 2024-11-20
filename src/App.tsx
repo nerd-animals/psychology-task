@@ -1,9 +1,9 @@
 import NBackTask from './tasks/nBack/NBackTask';
 import TimeReproductionTask from './tasks/timeReproduction/TimeReproductionTask';
-import useTaskStore from './store/taskStore';
+import useAppStore from './store/appStore';
 
 function App() {
-  const { task, setTask } = useTaskStore();
+  const { task, setTask } = useAppStore();
 
   return (
     <>

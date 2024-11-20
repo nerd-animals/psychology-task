@@ -40,8 +40,3 @@ export interface Result {
   submittedAnswer: string;
   duration: number;
 }
-
-export interface Subject {
-  subjectLabel: string; // anything
-  date: Date;
-}

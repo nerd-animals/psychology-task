@@ -1,13 +1,10 @@
 import React, { ChangeEvent, useRef } from 'react';
-import { Subject } from '../lib/type';
 import Button from '../component/button';
 import useTaskStore from '../store/taskStore';
+import useAppStore from '../../../store/appStore';
 
-export default function setup({
-  setSubject,
-}: {
-  setSubject: (subject: Subject) => void;
-}) {
+export default function setup() {
+  const setSubject = useAppStore((state) => state.setSubejct);
   const setTaskStep = useTaskStore((state) => state.setTaskStep);
   const inputRef = useRef<string>('');
 
@@ -15,7 +12,7 @@ export default function setup({
     // todo: inputRef가 비어있을 때, toast ui로 경고 띄우기
 
     setSubject({
-      subjectLabel: inputRef.current || 'NULL',
+      label: inputRef.current || 'NULL',
       date: new Date(),
     });
   };

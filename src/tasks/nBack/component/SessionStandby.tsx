@@ -17,5 +17,5 @@ export default function SessionStandby() {
     return () => window.clearTimeout(standbyTimer.current);
   }, []);
 
-  return <>Session Standby PAGE</>;
+  return <>잠시 후, 시작됩니다. 화면을 집중해주세요!</>;
 }

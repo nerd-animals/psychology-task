@@ -16,27 +16,15 @@ const INITIAL_APP_SETTING: TaskSetting = {
   initializeTime: 5000,
   visibleTime: 500,
   waitTime: 2000,
-  sessionChangeTime: 5000,
-  trialSessionList: [
-    {
-      id: 'trial',
-      sessionIndex: 0,
-      taskList: [2, 1, 8, 5, 1, 7],
-      solutionList: [],
-    },
-  ],
   sessionList: [
     {
       id: uuid(),
-      sessionIndex: 0,
       taskList: [3, 5, 7, 4, 6, 7],
-      solutionList: [],
-    },
-    {
-      id: uuid(),
-      sessionIndex: 1,
-      taskList: [9, 4, 3, 5, 4, 7],
-      solutionList: [],
+      previewImgLinkList: ['test url'],
+      showButtonClicked: true,
+      showBackCountToast: true,
+      correctBgColor: 'bg-green-400',
+      incorrectBgColor: 'bg-red-400',
     },
   ],
 };
@@ -52,24 +40,6 @@ interface Actions {
   setTaskSetting: (taskSetting: TaskSetting) => void;
   addResult: (result: Result) => void;
   clearResult: () => void;
-  solveTask: () => void;
-}
-
-function solve(backCount: number, session: Session) {
-  const solutionList = session.taskList.map((value, index) => {
-    if (index < backCount) {
-      return NONE_FLAG;
-    }
-    const nBackValue = session.taskList.at(index - backCount);
-
-    if (value === nBackValue) {
-      return SAME_FLAG;
-    }
-    return DIFF_FLAG;
-  });
-
-  const solvedSession = { ...session, solutionList: [...solutionList] };
-  return solvedSession;
 }
 
 const useTaskStore = create<State & Actions>()(
@@ -84,22 +54,6 @@ const useTaskStore = create<State & Actions>()(
         state.resultList.push(result);
       }),
     clearResult: () => set({ resultList: [] }),
-    solveTask: () =>
-      set((state) => {
-        const solvedSessionList = state.taskSetting.sessionList.map((session) =>
-          solve(state.taskSetting.backCount, session)
-        );
-        const solvedTrialSessionList = state.taskSetting.trialSessionList.map(
-          (session) => solve(state.taskSetting.backCount, session)
-        );
-        return {
-          taskSetting: {
-            ...state.taskSetting,
-            sessionList: solvedSessionList,
-            trialSessionList: solvedTrialSessionList,
-          },
-        };
-      }),
   }))
 );
 

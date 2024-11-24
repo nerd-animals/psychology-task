@@ -3,19 +3,12 @@ import Button from '../component/button';
 import Modal from '../component/modal';
 import useTaskStore from '../store/taskStore';
 
-export default function home() {
+export default function Home() {
   const taskSetting = useTaskStore((state) => state.taskSetting);
   const setTaskStep = useTaskStore((state) => state.setTaskStep);
 
   const [isModalOpen, setIsModelOpen] = useState<boolean>(false);
   const isReady = () => {
-    if (taskSetting.trialSessionList.length === 0) return false;
-    if (
-      taskSetting.trialSessionList.some(
-        (session) => session.taskList.length === 0
-      )
-    )
-      return false;
     if (taskSetting.sessionList.length === 0) return false;
     if (
       taskSetting.sessionList.some((session) => session.taskList.length === 0)
@@ -41,7 +34,7 @@ export default function home() {
             label="Start"
             onClick={() => {
               if (isReady()) {
-                setTaskStep('setup');
+                setTaskStep('subject-setup');
               } else {
                 setIsModelOpen(true);
               }

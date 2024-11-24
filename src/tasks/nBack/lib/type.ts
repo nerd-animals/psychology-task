@@ -5,21 +5,18 @@ export const NONE_FLAG = '-';
 export type TaskStep =
   | 'home'
   | 'setting'
-  | 'setup'
-  | 'stand-by'
-  | 'explain'
-  | 'trial'
-  | 'pre-final-trial'
-  | 'final-trial'
-  | 'pre-task'
+  | 'subject-setup'
   | 'task'
-  | 'post-task';
+  | 'export-result';
 
 export interface Session {
   id: string;
-  sessionIndex: number;
   taskList: number[];
-  solutionList: string[];
+  previewImgLinkList: string[];
+  showButtonClicked: boolean;
+  showBackCountToast: boolean;
+  correctBgColor: string;
+  incorrectBgColor: string;
 }
 
 export interface TaskSetting {
@@ -27,14 +24,12 @@ export interface TaskSetting {
   initializeTime: number; // ms
   visibleTime: number; // ms
   waitTime: number; // ms
-  sessionChangeTime: number; // ms
-  trialSessionList: Session[];
   sessionList: Session[];
 }
 
 export interface Result {
   sessionIndex: number;
-  taskIndex: number;
+  index: number;
   value: number;
   solution: string;
   submittedAnswer: string;

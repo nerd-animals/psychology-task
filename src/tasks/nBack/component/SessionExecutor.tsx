@@ -1,33 +1,36 @@
 import { useEffect, useRef, useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { DIFF_FLAG, NONE_FLAG, SAME_FLAG, Session, Result } from '../lib/type';
+import { DIFF_FLAG, NONE_FLAG, SAME_FLAG } from '../lib/type';
+import useSessionStore from '../store/sessionStore';
+import useTaskStore from '../store/taskStore';
 
 const SAME_FLAG_CODE = 'Slash';
 const DIFF_FLAG_CODE = 'KeyZ';
 const SHOW_SUBMISSION_STATUS_DURATION = 1000;
 
-export default function taskBox({
-  session,
-  backCount,
-  waitTime,
-  visibleTime,
-  correctColor,
-  wrongColor,
-  showSubmissionStatus,
-  setIsFinished,
-  addResult,
-}: {
-  session: Session;
-  backCount: number;
-  waitTime: number;
-  visibleTime: number;
-  correctColor: string;
-  wrongColor: string;
-  showSubmissionStatus: boolean;
-  setIsFinished: (isFinished: boolean) => void;
-  addResult: (result: Result) => void;
-}) {
+function solve(backCount: number, taskList: number[]) {
+  const solutionList = taskList.map((value, index) => {
+    if (index < backCount) {
+      return NONE_FLAG;
+    }
+    const nBackValue = taskList.at(index - backCount);
+
+    if (value === nBackValue) {
+      return SAME_FLAG;
+    }
+    return DIFF_FLAG;
+  });
+
+  return solutionList;
+}
+
+export default function SessionExecutor() {
+  const sessionIndex = useSessionStore((state) => state.sessionIndex);
+  const setSessionState = useSessionStore((state) => state.setSessionState);
+  const taskSetting = useTaskStore((state) => state.taskSetting);
+  const addResult = useTaskStore((state) => state.addResult);
+
   const [index, setIndex] = useState<number>(0);
   const [isVisible, setIsVisible] = useState<boolean>(true);
   const [displaySubmissionStatus, setDisplaySubmissionStatus] =
@@ -37,28 +40,35 @@ export default function taskBox({
   const initialTimeRef = useRef<number>(window.performance.now());
   const durationRef = useRef<number>(-1);
   const visibleTimer = useRef<number>();
-  const { sessionIndex, taskList, solutionList } = session;
+
+  const {
+    taskList,
+    correctBgColor,
+    incorrectBgColor,
+    showBackCountToast,
+    showButtonClicked,
+  } = taskSetting.sessionList[sessionIndex];
+  const solutionList = solve(taskSetting.backCount, taskList);
 
   const notifyBackCount = () => {
-    toast(`${backCount + 1}번째부터 응답 가능합니다.`);
+    toast(`${taskSetting.backCount + 1}번째부터 응답 가능합니다.`);
   };
   const appendResult = () => {
-    const result: Result = {
-      sessionIndex,
-      taskIndex: index,
+    addResult({
+      sessionIndex: sessionIndex + 1,
+      index: index + 1,
       value: taskList[index],
       solution: solutionList[index],
       submittedAnswer: submittedAnswerRef.current || NONE_FLAG,
       duration: durationRef.current,
-    };
-    addResult(result);
+    });
   };
 
   const displayResult = () => {
     if (submittedAnswerRef.current === solutionList[index]) {
-      setColor(correctColor);
+      setColor(correctBgColor);
     } else {
-      setColor(wrongColor);
+      setColor(incorrectBgColor);
     }
   };
 
@@ -75,7 +85,7 @@ export default function taskBox({
 
   useEffect(() => {
     if (index >= taskList.length) {
-      setIsFinished(true);
+      setSessionState('end');
       return undefined;
     }
 
@@ -84,8 +94,8 @@ export default function taskBox({
 
       visibleTimer.current = window.setTimeout(() => {
         if (
-          showSubmissionStatus &&
-          index >= backCount &&
+          showButtonClicked &&
+          index >= taskSetting.backCount &&
           submittedAnswerRef.current === undefined
         ) {
           setDisplaySubmissionStatus(true);
@@ -96,8 +106,8 @@ export default function taskBox({
         } else {
           finalize();
         }
-      }, waitTime);
-    }, visibleTime);
+      }, taskSetting.waitTime);
+    }, taskSetting.visibleTime);
 
     return () => window.clearTimeout(visibleTimer.current);
   }, [index]);
@@ -116,9 +126,9 @@ export default function taskBox({
         durationRef.current = window.performance.now() - initialTimeRef.current;
       }
 
-      if (index >= backCount) {
+      if (index >= taskSetting.backCount) {
         displayResult();
-      } else if (showSubmissionStatus) {
+      } else if (showBackCountToast) {
         notifyBackCount();
       }
     };

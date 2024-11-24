@@ -6,10 +6,9 @@ import useTaskStore from '../store/taskStore';
 
 const VALID_BACK_COUNT = [2, 3, 4];
 
-export default function setting() {
+export default function Setting() {
   const taskSetting = useTaskStore((state) => state.taskSetting);
   const setTaskSetting = useTaskStore((state) => state.setTaskSetting);
-  const solveTask = useTaskStore((state) => state.solveTask);
   const setTaskStep = useTaskStore((state) => state.setTaskStep);
   const [newTaskSetting, setNewTaskSetting] = useState<TaskSetting>({
     ...taskSetting,
@@ -23,7 +22,6 @@ export default function setting() {
           label="save"
           onClick={() => {
             setTaskSetting(newTaskSetting);
-            solveTask();
           }}
         />
       </div>
@@ -54,17 +52,6 @@ export default function setting() {
         />
       </div>
       <div className="flex grid grid-cols-2 space-x-2">
-        <div>sessionChangeTime(ms)</div>
-        <input
-          type="number"
-          value={newTaskSetting.sessionChangeTime}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            const value = e.target.valueAsNumber || 0;
-            setNewTaskSetting({ ...newTaskSetting, sessionChangeTime: value });
-          }}
-        />
-      </div>
-      <div className="flex grid grid-cols-2 space-x-2">
         <div>visibleTime(ms)</div>
         <input
           type="number"
@@ -86,37 +73,6 @@ export default function setting() {
           }}
         />
       </div>
-      {newTaskSetting.trialSessionList.map((session: Session, index) => (
-        <div key={session.id} className="flex grid grid-cols-2 space-x-2">
-          <div>{`${index + 1}번째 trial session`}</div>
-          <input
-            type="string"
-            defaultValue={session.taskList.join(',')}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              const valueList = e.target.value
-                .split(',')
-                .filter((x) => x.trim() !== '' && !Number.isNaN(Number(x)));
-
-              const originSession: Session = newTaskSetting.sessionList[index];
-              const newSession: Session = {
-                ...originSession,
-                taskList: valueList.map((value) => parseInt(value, 10)),
-              };
-
-              const newSessionList: Session[] = [
-                ...newTaskSetting.sessionList.slice(0, index),
-                { ...newSession },
-                ...newTaskSetting.sessionList.slice(index + 1),
-              ];
-
-              setNewTaskSetting({
-                ...newTaskSetting,
-                sessionList: newSessionList,
-              });
-            }}
-          />
-        </div>
-      ))}
       {newTaskSetting.sessionList.map((session: Session, index) => (
         <div key={session.id} className="flex grid grid-cols-2 space-x-2">
           <div>{`${index + 1}번째 session`}</div>
@@ -157,9 +113,12 @@ export default function setting() {
               ...newTaskSetting.sessionList,
               {
                 id: uuid(),
-                sessionIndex: newTaskSetting.sessionList.length,
                 taskList: [],
-                solutionList: [],
+                previewImgLinkList: [],
+                showButtonClicked: false,
+                showBackCountToast: false,
+                correctBgColor: 'green-400',
+                incorrectBgColor: 'red-400',
               },
             ],
           })

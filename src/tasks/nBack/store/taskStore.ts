@@ -12,7 +12,10 @@ const INITIAL_APP_SETTING: TaskSetting = {
     {
       id: uuid(),
       taskList: [3, 5, 7, 4, 6, 7],
-      previewImgLinkList: ['test url'],
+      previewImgLinkList: [
+        '1ID-L7JmgNKn8gB6aqV78JgO2RNlPoERq',
+        '1ID-L7JmgNKn8gB6aqV78JgO2RNlPoERq',
+      ],
       showButtonClicked: true,
       showBackCountToast: true,
       correctBgColor: 'bg-green-400',

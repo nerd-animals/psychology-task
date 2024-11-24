@@ -52,7 +52,10 @@ export default function SessionPreview() {
     <div className="flex flex-col justify-between w-full h-full">
       {/* 중간 설명 영역 (스크롤 가능) */}
       <div className="flex flex-col items-center flex-grow px-4 my-4 overflow-y-auto text-center">
-        {previewImgLinkList[index]}
+        <img
+          src={`https://drive.google.com/thumbnail?id=${previewImgLinkList[index]}&sz=w1000`}
+          alt="Google Drive"
+        />
       </div>
 
       {/* 하단 좌우 버튼 */}

@@ -25,7 +25,7 @@ export default function Setting() {
           }}
         />
       </div>
-      <div className="flex grid grid-cols-2 space-x-2">
+      <div className="grid grid-cols-2 space-x-2">
         <div>back count</div>
         <input
           type="number"
@@ -40,7 +40,7 @@ export default function Setting() {
           }}
         />
       </div>
-      <div className="flex grid grid-cols-2 space-x-2">
+      <div className="grid grid-cols-2 space-x-2">
         <div>initializeTime(ms)</div>
         <input
           type="number"
@@ -51,7 +51,7 @@ export default function Setting() {
           }}
         />
       </div>
-      <div className="flex grid grid-cols-2 space-x-2">
+      <div className="grid grid-cols-2 space-x-2">
         <div>visibleTime(ms)</div>
         <input
           type="number"

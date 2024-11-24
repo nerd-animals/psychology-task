@@ -1,15 +1,7 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { v4 as uuid } from 'uuid';
-import {
-  TaskStep,
-  TaskSetting,
-  Result,
-  Session,
-  NONE_FLAG,
-  SAME_FLAG,
-  DIFF_FLAG,
-} from '../lib/type';
+import { TaskStep, TaskSetting, Result } from '../lib/type';
 
 const INITIAL_APP_SETTING: TaskSetting = {
   backCount: 3,

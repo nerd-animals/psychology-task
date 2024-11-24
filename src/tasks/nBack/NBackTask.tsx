@@ -6,11 +6,8 @@ import Setting from './step/Setting';
 import Container from './component/Container';
 import useTaskStore from './store/taskStore';
 
-const NO_CURSOR_STEP = ['task', 'trial'];
-
 export default function NBackTask() {
   const step = useTaskStore((state) => state.taskStep);
-  // const cursorOption = NO_CURSOR_STEP.includes(step) ? 'cursor-none' : '';
 
   return (
     <main>

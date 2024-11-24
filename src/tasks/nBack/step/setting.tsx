@@ -117,8 +117,8 @@ export default function Setting() {
                 previewImgLinkList: [],
                 showButtonClicked: false,
                 showBackCountToast: false,
-                correctBgColor: 'green-400',
-                incorrectBgColor: 'red-400',
+                correctBgColor: 'bg-green-400',
+                incorrectBgColor: 'bg-red-400',
               },
             ],
           })

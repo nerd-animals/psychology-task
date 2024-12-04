@@ -2,46 +2,36 @@ export const DIFF_FLAG = 'diff';
 export const SAME_FLAG = 'same';
 export const NONE_FLAG = '-';
 
-export type AppStep =
+export type TaskStep =
   | 'home'
   | 'setting'
-  | 'setup'
-  | 'stand-by'
-  | 'explain'
-  | 'trial'
-  | 'pre-final-trial'
-  | 'final-trial'
-  | 'pre-task'
+  | 'subject-setup'
   | 'task'
-  | 'post-task';
+  | 'export-result';
 
 export interface Session {
   id: string;
-  sessionIndex: number;
   taskList: number[];
-  solutionList: string[];
+  previewImgLinkList: string[];
+  showButtonClicked: boolean;
+  showBackCountToast: boolean;
+  correctBgColor: string;
+  incorrectBgColor: string;
 }
 
-export interface AppSetting {
+export interface TaskSetting {
   backCount: number;
   initializeTime: number; // ms
   visibleTime: number; // ms
   waitTime: number; // ms
-  sessionChangeTime: number; // ms
-  trialSession: Session;
   sessionList: Session[];
 }
 
 export interface Result {
   sessionIndex: number;
-  taskIndex: number;
+  index: number;
   value: number;
   solution: string;
   submittedAnswer: string;
   duration: number;
-}
-
-export interface Subject {
-  subjectLabel: string; // anything
-  date: Date;
 }

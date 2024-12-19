@@ -17,14 +17,18 @@ export default function Setting() {
   return (
     <div className="w-full max-w-md space-y-4">
       <div className="flex justify-between">
-        <Button label="home" onClick={() => setTaskStep('home')} />
-        <Button
-          label="save"
+        <button
+          className="px-2 py-1 text-white bg-gray-500 rounded-lg hover:bg-gray-600"
+          type="button"
           onClick={() => {
             setTaskSetting(newTaskSetting);
+            setTaskStep('home');
           }}
-        />
+        >
+          Home
+        </button>
       </div>
+      <h2 className="text-xl font-bold">Task Setting</h2>
       <div className="grid grid-cols-2 space-x-2">
         <div>back count</div>
         <input
@@ -41,7 +45,7 @@ export default function Setting() {
         />
       </div>
       <div className="grid grid-cols-2 space-x-2">
-        <div>initializeTime(ms)</div>
+        <div>Inter-Session Interval (ms)</div>
         <input
           type="number"
           value={newTaskSetting.initializeTime}
@@ -52,7 +56,7 @@ export default function Setting() {
         />
       </div>
       <div className="grid grid-cols-2 space-x-2">
-        <div>visibleTime(ms)</div>
+        <div>Stimulus Duration (ms)</div>
         <input
           type="number"
           value={newTaskSetting.visibleTime}
@@ -63,7 +67,7 @@ export default function Setting() {
         />
       </div>
       <div className="flex grid grid-cols-2 space-x-2">
-        <div>waitTime(ms)</div>
+        <div>Inter-Stimulus Interval (ms)</div>
         <input
           type="number"
           value={newTaskSetting.waitTime}
@@ -73,57 +77,104 @@ export default function Setting() {
           }}
         />
       </div>
+      <div className="grid grid-cols-2">
+        <h2 className="text-xl font-bold">Session Setting</h2>
+        <button
+          type="button"
+          className="flex items-center justify-center w-8 h-8"
+          onClick={() =>
+            setNewTaskSetting({
+              ...newTaskSetting,
+              sessionList: [
+                ...newTaskSetting.sessionList,
+                {
+                  id: uuid(),
+                  taskList: [],
+                  previewImgLinkList: [],
+                  showButtonClicked: false,
+                  showBackCountToast: false,
+                  correctBgColor: 'bg-green-400',
+                  incorrectBgColor: 'bg-red-400',
+                },
+              ],
+            })
+          }
+        >
+          +
+        </button>
+      </div>
+
       {newTaskSetting.sessionList.map((session: Session, index) => (
-        <div key={session.id} className="flex grid grid-cols-2 space-x-2">
-          <div>{`${index + 1}번째 session`}</div>
-          <input
-            type="string"
-            defaultValue={session.taskList.join(',')}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              const valueList = e.target.value
-                .split(',')
-                .filter((x) => x.trim() !== '' && !Number.isNaN(Number(x)));
+        <div key={session.id}>
+          <div className="grid grid-cols-4 ">
+            <div>{`${index + 1}번째 session`}</div>
+            <button type="button" onClick={() => console.log(index)}>
+              -
+            </button>
+          </div>
 
-              const originSession: Session = newTaskSetting.sessionList[index];
-              const newSession: Session = {
-                ...originSession,
-                taskList: valueList.map((value) => parseInt(value, 10)),
-              };
+          <div className="grid grid-cols-2 space-x-2">
+            <div>Stimulus</div>
+            <input
+              type="string"
+              defaultValue={session.taskList.join(',')}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                const valueList = e.target.value
+                  .split(',')
+                  .filter((x) => x.trim() !== '' && !Number.isNaN(Number(x)));
 
-              const newSessionList: Session[] = [
-                ...newTaskSetting.sessionList.slice(0, index),
-                { ...newSession },
-                ...newTaskSetting.sessionList.slice(index + 1),
-              ];
+                const originSession: Session =
+                  newTaskSetting.sessionList[index];
+                const newSession: Session = {
+                  ...originSession,
+                  taskList: valueList.map((value) => parseInt(value, 10)),
+                };
 
-              setNewTaskSetting({
-                ...newTaskSetting,
-                sessionList: newSessionList,
-              });
-            }}
-          />
+                const newSessionList: Session[] = [
+                  ...newTaskSetting.sessionList.slice(0, index),
+                  { ...newSession },
+                  ...newTaskSetting.sessionList.slice(index + 1),
+                ];
+
+                setNewTaskSetting({
+                  ...newTaskSetting,
+                  sessionList: newSessionList,
+                });
+              }}
+            />
+          </div>
+          <div className="grid grid-cols-2 space-x-2">
+            <div>Preview Image Link</div>
+            <div>a</div>
+          </div>
+          <div className="grid grid-cols-2 space-x-2">
+            <div>Show Button Clicked</div>
+            <input
+              type="checkbox"
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                // session.showBackCountToast = event.target.checked;
+              }}
+            />
+          </div>
+          <div className="grid grid-cols-2 space-x-2">
+            <div>Show N by Toast</div>
+            <input
+              type="checkbox"
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                console.log(event.target.checked)
+              }
+            />
+          </div>
+          <div className="grid grid-cols-2 space-x-2">
+            <div>Correct Color</div>
+            <div>a</div>
+          </div>
+          <div className="grid grid-cols-2 space-x-2">
+            <div>Wrong Color</div>
+            <div>a</div>
+          </div>
         </div>
       ))}
-      <Button
-        label="add Session"
-        onClick={() =>
-          setNewTaskSetting({
-            ...newTaskSetting,
-            sessionList: [
-              ...newTaskSetting.sessionList,
-              {
-                id: uuid(),
-                taskList: [],
-                previewImgLinkList: [],
-                showButtonClicked: false,
-                showBackCountToast: false,
-                correctBgColor: 'bg-green-400',
-                incorrectBgColor: 'bg-red-400',
-              },
-            ],
-          })
-        }
-      />
       <Button
         label="remove Last Session"
         onClick={() => {

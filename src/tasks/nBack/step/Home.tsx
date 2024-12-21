@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import Button from '../component/button';
 import Modal from '../component/modal';
 import useTaskStore from '../store/taskStore';
+import useSessionStore from '../store/sessionStore';
 
 export default function Home() {
+  const sessionList = useSessionStore((state) => state.sessionList);
   const taskSetting = useTaskStore((state) => state.taskSetting);
   const setTaskStep = useTaskStore((state) => state.setTaskStep);
 
   const [isModalOpen, setIsModelOpen] = useState<boolean>(false);
   const isReady = () => {
-    if (taskSetting.sessionList.length === 0) return false;
-    if (
-      taskSetting.sessionList.some((session) => session.taskList.length === 0)
-    )
+    if (sessionList.length === 0) return false;
+    if (sessionList.some((session) => session.taskList.length === 0))
       return false;
     return true;
   };

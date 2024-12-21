@@ -15,8 +15,7 @@ export interface Session {
   previewImgLinkList: string[];
   showButtonClicked: boolean;
   showBackCountToast: boolean;
-  correctBgColor: string;
-  incorrectBgColor: string;
+  showBgColor: boolean;
 }
 
 export interface TaskSetting {
@@ -24,7 +23,6 @@ export interface TaskSetting {
   initializeTime: number; // ms
   visibleTime: number; // ms
   waitTime: number; // ms
-  sessionList: Session[];
 }
 
 export interface Result {

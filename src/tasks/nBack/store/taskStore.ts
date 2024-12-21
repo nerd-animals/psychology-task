@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
-import { v4 as uuid } from 'uuid';
 import { TaskStep, TaskSetting, Result } from '../lib/type';
 
 const INITIAL_APP_SETTING: TaskSetting = {
@@ -8,24 +7,6 @@ const INITIAL_APP_SETTING: TaskSetting = {
   initializeTime: 5000,
   visibleTime: 500,
   waitTime: 2000,
-  sessionList: [
-    {
-      id: uuid(),
-      taskList: [3, 5, 7, 4, 6, 7],
-      previewImgLinkList: [
-        '1cqa3omD0Z4JnQ9R_XuW171rPhXwD4KxM',
-        '19VjxGJ-XiYmSwIT-kZxoleF2ogOGs4Jf',
-        '19Dz_4vaNX5KfxzWEHba2R9xOxqTM21tP',
-        '11AOCRGLhMa9cn4DGFwVCGNXbBT19swHc',
-        '1W4CC_REyEYwn5fzM_rxSC51aBOsl3maz',
-        '18l6VLr89GQj39diOB1tKp_ZFt8seYj_x',
-      ],
-      showButtonClicked: true,
-      showBackCountToast: true,
-      correctBgColor: 'bg-green-400',
-      incorrectBgColor: 'bg-red-400',
-    },
-  ],
 };
 
 interface State {

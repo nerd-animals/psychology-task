@@ -6,10 +6,14 @@ import useTaskStore from '../store/taskStore';
 import useSessionStore from '../store/sessionStore';
 
 export default function Task() {
-  const { sessionState, sessionIndex, setSessionState, setSessionIndex } =
-    useSessionStore();
+  const {
+    sessionList,
+    sessionState,
+    sessionIndex,
+    setSessionState,
+    setSessionIndex,
+  } = useSessionStore();
   const setTaskStep = useTaskStore((state) => state.setTaskStep);
-  const sessionList = useTaskStore((state) => state.taskSetting.sessionList);
 
   useEffect(() => {
     if (sessionIndex < sessionList.length) {

@@ -1,18 +1,20 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent } from 'react';
 import { v4 as uuid } from 'uuid';
-import { TaskSetting, Session } from '../lib/type';
+import { Session } from '../lib/type';
 import Button from '../component/button';
 import useTaskStore from '../store/taskStore';
+import useSessionStore from '../store/sessionStore';
 
 const VALID_BACK_COUNT = [2, 3, 4];
 
 export default function Setting() {
   const taskSetting = useTaskStore((state) => state.taskSetting);
+  const sessionList = useSessionStore((state) => state.sessionList);
+  const addSession = useSessionStore((state) => state.addSession);
+  const updateSession = useSessionStore((state) => state.updateSession);
+  const removeSession = useSessionStore((state) => state.removeSession);
   const setTaskSetting = useTaskStore((state) => state.setTaskSetting);
   const setTaskStep = useTaskStore((state) => state.setTaskStep);
-  const [newTaskSetting, setNewTaskSetting] = useState<TaskSetting>({
-    ...taskSetting,
-  });
 
   return (
     <div className="w-full max-w-md space-y-4">
@@ -20,10 +22,7 @@ export default function Setting() {
         <button
           className="px-2 py-1 text-white bg-gray-500 rounded-lg hover:bg-gray-600"
           type="button"
-          onClick={() => {
-            setTaskSetting(newTaskSetting);
-            setTaskStep('home');
-          }}
+          onClick={() => setTaskStep('home')}
         >
           Home
         </button>
@@ -33,11 +32,11 @@ export default function Setting() {
         <div>back count</div>
         <input
           type="number"
-          value={newTaskSetting.backCount}
+          value={taskSetting.backCount}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             const value = e.target.valueAsNumber || 0;
             if (VALID_BACK_COUNT.includes(value)) {
-              setNewTaskSetting({ ...newTaskSetting, backCount: value });
+              setTaskSetting({ ...taskSetting, backCount: value });
             } else {
               // alert
             }
@@ -48,10 +47,10 @@ export default function Setting() {
         <div>Inter-Session Interval (ms)</div>
         <input
           type="number"
-          value={newTaskSetting.initializeTime}
+          value={taskSetting.initializeTime}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             const value = e.target.valueAsNumber || 0;
-            setNewTaskSetting({ ...newTaskSetting, initializeTime: value });
+            setTaskSetting({ ...taskSetting, initializeTime: value });
           }}
         />
       </div>
@@ -59,10 +58,10 @@ export default function Setting() {
         <div>Stimulus Duration (ms)</div>
         <input
           type="number"
-          value={newTaskSetting.visibleTime}
+          value={taskSetting.visibleTime}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             const value = e.target.valueAsNumber || 0;
-            setNewTaskSetting({ ...newTaskSetting, visibleTime: value });
+            setTaskSetting({ ...taskSetting, visibleTime: value });
           }}
         />
       </div>
@@ -70,10 +69,10 @@ export default function Setting() {
         <div>Inter-Stimulus Interval (ms)</div>
         <input
           type="number"
-          value={newTaskSetting.waitTime}
+          value={taskSetting.waitTime}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             const value = e.target.valueAsNumber || 0;
-            setNewTaskSetting({ ...newTaskSetting, waitTime: value });
+            setTaskSetting({ ...taskSetting, waitTime: value });
           }}
         />
       </div>
@@ -82,33 +81,17 @@ export default function Setting() {
         <button
           type="button"
           className="flex items-center justify-center w-8 h-8"
-          onClick={() =>
-            setNewTaskSetting({
-              ...newTaskSetting,
-              sessionList: [
-                ...newTaskSetting.sessionList,
-                {
-                  id: uuid(),
-                  taskList: [],
-                  previewImgLinkList: [],
-                  showButtonClicked: false,
-                  showBackCountToast: false,
-                  correctBgColor: 'bg-green-400',
-                  incorrectBgColor: 'bg-red-400',
-                },
-              ],
-            })
-          }
+          onClick={() => addSession()}
         >
           +
         </button>
       </div>
 
-      {newTaskSetting.sessionList.map((session: Session, index) => (
+      {sessionList.map((session: Session, index) => (
         <div key={session.id}>
           <div className="grid grid-cols-4 ">
             <div>{`${index + 1}번째 session`}</div>
-            <button type="button" onClick={() => console.log(index)}>
+            <button type="button" onClick={() => removeSession(index)}>
               -
             </button>
           </div>
@@ -121,24 +104,12 @@ export default function Setting() {
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 const valueList = e.target.value
                   .split(',')
-                  .filter((x) => x.trim() !== '' && !Number.isNaN(Number(x)));
+                  .filter((x) => x.trim() !== '' && !Number.isNaN(Number(x)))
+                  .map((value) => parseInt(value, 10));
 
-                const originSession: Session =
-                  newTaskSetting.sessionList[index];
-                const newSession: Session = {
-                  ...originSession,
-                  taskList: valueList.map((value) => parseInt(value, 10)),
-                };
-
-                const newSessionList: Session[] = [
-                  ...newTaskSetting.sessionList.slice(0, index),
-                  { ...newSession },
-                  ...newTaskSetting.sessionList.slice(index + 1),
-                ];
-
-                setNewTaskSetting({
-                  ...newTaskSetting,
-                  sessionList: newSessionList,
+                updateSession(index, {
+                  ...sessionList[index],
+                  taskList: valueList,
                 });
               }}
             />
@@ -175,20 +146,6 @@ export default function Setting() {
           </div>
         </div>
       ))}
-      <Button
-        label="remove Last Session"
-        onClick={() => {
-          setNewTaskSetting({
-            ...newTaskSetting,
-            sessionList: [
-              ...newTaskSetting.sessionList.slice(
-                0,
-                newTaskSetting.sessionList.length - 1
-              ),
-            ],
-          });
-        }}
-      />
     </div>
   );
 }

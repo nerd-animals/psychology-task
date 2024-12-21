@@ -26,6 +26,7 @@ function solve(backCount: number, taskList: number[]) {
 }
 
 export default function SessionExecutor() {
+  const sessionList = useSessionStore((state) => state.sessionList);
   const sessionIndex = useSessionStore((state) => state.sessionIndex);
   const setSessionState = useSessionStore((state) => state.setSessionState);
   const taskSetting = useTaskStore((state) => state.taskSetting);
@@ -41,13 +42,8 @@ export default function SessionExecutor() {
   const durationRef = useRef<number>(-1);
   const visibleTimer = useRef<number>();
 
-  const {
-    taskList,
-    correctBgColor,
-    incorrectBgColor,
-    showBackCountToast,
-    showButtonClicked,
-  } = taskSetting.sessionList[sessionIndex];
+  const { taskList, showBgColor, showBackCountToast, showButtonClicked } =
+    sessionList[sessionIndex];
   const solutionList = solve(taskSetting.backCount, taskList);
 
   const notifyBackCount = () => {
@@ -66,9 +62,9 @@ export default function SessionExecutor() {
 
   const displayResult = () => {
     if (submittedAnswerRef.current === solutionList[index]) {
-      setColor(correctBgColor);
+      setColor(showBgColor ? 'bg-green-400' : 'bg-gray-400');
     } else {
-      setColor(incorrectBgColor);
+      setColor(showBgColor ? 'bg-red-400' : 'bg-gray-400');
     }
   };
 

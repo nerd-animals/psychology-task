@@ -135,6 +135,14 @@ export default function Setting() {
                     type="string"
                     className="overflow-x-auto"
                     defaultValue={link}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                      const buf = [...session.previewImgLinkList];
+                      buf.splice(i, 1, e.target.value);
+                      updateSession(index, {
+                        ...session,
+                        previewImgLinkList: buf,
+                      });
+                    }}
                   />
                   <button
                     type="button"

@@ -27,7 +27,7 @@ const useSessionStore = create<State & Actions>()(
         taskList: [3, 5, 7, 4, 6, 7],
         previewImgLinkList: [
           '1cqa3omD0Z4JnQ9R_XuW171rPhXwD4KxM',
-          '19VjxGJ-XiYmSwIT-kZxoleF2ogOGs4Jf',
+          '1tTJasMBO5pXKzrgZHfm_kmVyNnvnogfP',
           '19Dz_4vaNX5KfxzWEHba2R9xOxqTM21tP',
           '11AOCRGLhMa9cn4DGFwVCGNXbBT19swHc',
           '1W4CC_REyEYwn5fzM_rxSC51aBOsl3maz',
@@ -36,6 +36,22 @@ const useSessionStore = create<State & Actions>()(
         showButtonClicked: true,
         showBackCountToast: true,
         showBgColor: true,
+      },
+      {
+        id: uuid(),
+        taskList: [3, 5, 7, 4, 6, 7],
+        previewImgLinkList: [],
+        showButtonClicked: false,
+        showBackCountToast: false,
+        showBgColor: false,
+      },
+      {
+        id: uuid(),
+        taskList: [3, 5, 7, 4, 6, 7],
+        previewImgLinkList: [],
+        showButtonClicked: false,
+        showBackCountToast: false,
+        showBgColor: false,
       },
     ],
     sessionState: 'start',
@@ -52,7 +68,9 @@ const useSessionStore = create<State & Actions>()(
         });
       }),
     updateSession: (idx, session) => {
-      set({});
+      set((state) => ({
+        sessionList: state.sessionList.map((v, i) => (i === idx ? session : v)),
+      }));
     },
     removeSession: (idx) => {
       set((state) => {

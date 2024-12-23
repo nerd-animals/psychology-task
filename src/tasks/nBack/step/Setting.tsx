@@ -116,33 +116,82 @@ export default function Setting() {
           </div>
           <div className="grid grid-cols-2 space-x-2">
             <div>Preview Image Link</div>
-            <div>a</div>
+            <button
+              type="button"
+              className="flex items-center justify-center w-8 h-8"
+              onClick={() => {
+                updateSession(index, {
+                  ...session,
+                  previewImgLinkList: [...session.previewImgLinkList, ''],
+                });
+              }}
+            >
+              +
+            </button>
+            <div>
+              {session.previewImgLinkList.map((link, i: number) => (
+                <div className="flex" key={uuid()}>
+                  <input
+                    type="string"
+                    className="overflow-x-auto"
+                    defaultValue={link}
+                  />
+                  <button
+                    type="button"
+                    className="flex items-center justify-center w-8 h-8"
+                    onClick={() => {
+                      const buf = [...session.previewImgLinkList];
+                      buf.splice(i, 1);
+                      updateSession(index, {
+                        ...session,
+                        previewImgLinkList: buf,
+                      });
+                    }}
+                  >
+                    -
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
           <div className="grid grid-cols-2 space-x-2">
             <div>Show Button Clicked</div>
             <input
               type="checkbox"
+              defaultChecked={session.showButtonClicked}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                // session.showBackCountToast = event.target.checked;
+                updateSession(index, {
+                  ...session,
+                  showButtonClicked: event.target.checked,
+                });
               }}
             />
           </div>
           <div className="grid grid-cols-2 space-x-2">
-            <div>Show N by Toast</div>
+            <div>Show Toast</div>
             <input
               type="checkbox"
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                console.log(event.target.checked)
-              }
+              defaultChecked={session.showBackCountToast}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                updateSession(index, {
+                  ...session,
+                  showBackCountToast: event.target.checked,
+                });
+              }}
             />
           </div>
           <div className="grid grid-cols-2 space-x-2">
-            <div>Correct Color</div>
-            <div>a</div>
-          </div>
-          <div className="grid grid-cols-2 space-x-2">
-            <div>Wrong Color</div>
-            <div>a</div>
+            <div>Show background color</div>
+            <input
+              type="checkbox"
+              defaultChecked={session.showBgColor}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                updateSession(index, {
+                  ...session,
+                  showBgColor: event.target.checked,
+                });
+              }}
+            />
           </div>
         </div>
       ))}

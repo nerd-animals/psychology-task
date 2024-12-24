@@ -20,6 +20,7 @@ export default function Task() {
       setSessionState('start');
     } else {
       setSessionIndex(0);
+      setSessionState('start');
       setTaskStep('export-result');
     }
   }, [sessionIndex]);

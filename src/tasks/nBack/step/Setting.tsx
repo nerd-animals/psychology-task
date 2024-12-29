@@ -1,7 +1,6 @@
 import React, { ChangeEvent } from 'react';
 import { v4 as uuid } from 'uuid';
 import { Session } from '../lib/type';
-import Button from '../component/button';
 import useTaskStore from '../store/taskStore';
 import useSessionStore from '../store/sessionStore';
 
@@ -65,7 +64,7 @@ export default function Setting() {
           }}
         />
       </div>
-      <div className="flex grid grid-cols-2 space-x-2">
+      <div className="grid grid-cols-2 space-x-2">
         <div>Inter-Stimulus Interval (ms)</div>
         <input
           type="number"

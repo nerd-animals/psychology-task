@@ -4,9 +4,7 @@ import useTaskStore from '../store/taskStore';
 
 export default function SessionStandby() {
   const setSessionState = useSessionStore((state) => state.setSessionState);
-  const initializeTime = useTaskStore(
-    (state) => state.taskSetting.initializeTime
-  );
+  const initializeTime = useTaskStore((state) => state.taskSetting.waitTime);
   const standbyTimer = useRef<number>();
 
   useEffect(() => {

@@ -12,7 +12,6 @@ export interface Session {
 }
 
 export interface TaskSetting {
-  initializeTime: number; // ms
   waitTime: number; // ms
 }
 

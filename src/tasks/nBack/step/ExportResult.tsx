@@ -20,15 +20,14 @@ export default function ExportResult() {
       </div>
       {resultList.length > 0 && (
         <CSVDownload
-          data={resultList.map((result, index) => ({
+          data={resultList.map((result) => ({
             name: subject.label,
             date: subject.date.toLocaleString(),
-            backCount: taskSetting.backCount,
-            initializeTime: taskSetting.initializeTime,
-            visibleTime: taskSetting.visibleTime,
-            waitTime: taskSetting.waitTime,
+            'back count': taskSetting.backCount,
+            'Inter-Session Interval (ms)': taskSetting.initializeTime,
+            'Stimulus Duration (ms)': taskSetting.visibleTime,
+            'Inter-Stimulus Interval (ms)': taskSetting.waitTime,
             ...result,
-            taskIndex: index + 1,
             score: result.solution === result.submittedAnswer ? 1 : 0,
           }))}
           target="_blank"

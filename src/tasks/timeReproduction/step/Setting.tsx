@@ -26,17 +26,6 @@ export default function Setting() {
       </div>
       <h2 className="text-xl font-bold">Task Setting</h2>
       <div className="grid grid-cols-2 space-x-2">
-        <div>Inter-Session Interval (ms)</div>
-        <input
-          type="number"
-          value={taskSetting.initializeTime}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            const value = e.target.valueAsNumber || 0;
-            setTaskSetting({ ...taskSetting, initializeTime: value });
-          }}
-        />
-      </div>
-      <div className="grid grid-cols-2 space-x-2">
         <div>Inter-Stimulus Interval (ms)</div>
         <input
           type="number"

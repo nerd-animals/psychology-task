@@ -4,7 +4,7 @@ import { TaskStep, TaskSetting, Result } from '../lib/type';
 
 const INITIAL_APP_SETTING: TaskSetting = {
   backCount: 3,
-  initializeTime: 5000,
+  initializeTime: 3000,
   visibleTime: 500,
   waitTime: 2000,
 };

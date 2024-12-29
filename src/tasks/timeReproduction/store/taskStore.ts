@@ -3,7 +3,6 @@ import { immer } from 'zustand/middleware/immer';
 import { TaskStep, TaskSetting, Result } from '../lib/type';
 
 const INITIAL_TASK_SETTING: TaskSetting = {
-  initializeTime: 3000,
   waitTime: 3000,
 };
 

@@ -32,6 +32,7 @@ export default function Home() {
         <div className="flex space-x-4">
           <button
             type="button"
+            className="bg-gray-300 rounded"
             onClick={() => {
               if (isReady()) {
                 setTaskStep('subject-setup');
@@ -42,10 +43,18 @@ export default function Home() {
           >
             Start
           </button>
-          <button type="button" onClick={() => setTaskStep('setting')}>
+          <button
+            type="button"
+            className="bg-gray-300 rounded"
+            onClick={() => setTaskStep('setting')}
+          >
             Setting
           </button>
-          <button type="button" onClick={() => setTask('none')}>
+          <button
+            type="button"
+            className="bg-gray-300 rounded"
+            onClick={() => setTask('none')}
+          >
             Select Task
           </button>
         </div>

@@ -23,10 +23,8 @@ export default function ExportResult() {
           data={resultList.map((result) => ({
             name: subject.label,
             date: subject.date.toLocaleString(),
-            initializeTime: taskSetting.initializeTime,
+            'Inter-Stimulus Interval (ms)': taskSetting.waitTime,
             ...result,
-            sessionIndex: result.sessionIndex + 1,
-            taskIndex: result.index + 1,
             diff: result.submittedAnswer - result.value,
           }))}
           target="_blank"

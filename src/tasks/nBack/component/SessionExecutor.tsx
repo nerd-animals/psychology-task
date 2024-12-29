@@ -65,9 +65,9 @@ export default function SessionExecutor() {
       return;
     }
     if (submittedAnswerRef.current === solutionList[index]) {
-      setColor(bgColorType === 'Gray' ? 'bg-gray-400' : 'bg-green-400');
+      setColor(bgColorType === 'Gray' ? 'bg-gray-200' : 'bg-green-400');
     } else {
-      setColor(bgColorType === 'Gray' ? 'bg-gray-400' : 'bg-red-400');
+      setColor(bgColorType === 'Gray' ? 'bg-gray-200' : 'bg-red-400');
     }
   };
 
@@ -138,7 +138,7 @@ export default function SessionExecutor() {
 
   return (
     <div
-      className={`w-full min-h-screen flex items-center justify-center ${color}`}
+      className={`w-full min-h-screen flex items-center justify-center ${color} cursor-none`}
     >
       {displaySubmissionStatus && <div>응답하지 않았습니다.</div>}
       {displaySubmissionStatus === false && (

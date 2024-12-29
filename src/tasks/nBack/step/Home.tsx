@@ -3,10 +3,11 @@ import Button from '../component/button';
 import Modal from '../component/modal';
 import useTaskStore from '../store/taskStore';
 import useSessionStore from '../store/sessionStore';
+import useAppStore from '../../../store/appStore';
 
 export default function Home() {
+  const setTask = useAppStore((state) => state.setTask);
   const sessionList = useSessionStore((state) => state.sessionList);
-  const taskSetting = useTaskStore((state) => state.taskSetting);
   const setTaskStep = useTaskStore((state) => state.setTaskStep);
 
   const [isModalOpen, setIsModelOpen] = useState<boolean>(false);
@@ -41,6 +42,7 @@ export default function Home() {
             }}
           />
           <Button label="Setting" onClick={() => setTaskStep('setting')} />
+          <Button label="Select Task" onClick={() => setTask('none')} />
         </div>
       </div>
     </>

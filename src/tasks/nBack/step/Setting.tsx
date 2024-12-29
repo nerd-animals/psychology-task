@@ -28,7 +28,7 @@ export default function Setting() {
       </div>
       <h2 className="text-xl font-bold">Task Setting</h2>
       <div className="grid grid-cols-2 space-x-2">
-        <div>back count</div>
+        <div>Back Count</div>
         <input
           type="number"
           value={taskSetting.backCount}
@@ -89,7 +89,7 @@ export default function Setting() {
       {sessionList.map((session: Session, index) => (
         <div key={session.id}>
           <div className="grid grid-cols-4 ">
-            <div>{`${index + 1}번째 session`}</div>
+            <div className="bg-gray-300 rounded">{`${index + 1}번째 session`}</div>
             <button type="button" onClick={() => removeSession(index)}>
               -
             </button>

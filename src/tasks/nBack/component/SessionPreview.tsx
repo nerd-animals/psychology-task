@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import useSessionStore from '../store/sessionStore';
-import useTaskStore from '../store/taskStore';
-import GoogleDriveImage from './GoogleDriveImage';
+import GoogleDriveImage from '../../../component/GoogleDriveImage';
 
 export default function SessionPreview() {
   const [index, setIndex] = useState<number>(0);

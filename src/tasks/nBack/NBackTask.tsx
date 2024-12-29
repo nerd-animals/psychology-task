@@ -3,7 +3,7 @@ import SubjectSetup from './step/SubjectSetup';
 import Task from './step/Task';
 import ExportResult from './step/ExportResult';
 import Setting from './step/Setting';
-import Container from './component/Container';
+import Container from '../../component/Container';
 import useTaskStore from './store/taskStore';
 
 export default function NBackTask() {

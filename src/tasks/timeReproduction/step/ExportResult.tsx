@@ -1,21 +1,14 @@
 import React, { useEffect } from 'react';
 import { CSVDownload } from 'react-csv';
-import { AppSetting, AppStep, Subject, Result } from '../lib/type';
-import Button from '../component/button';
+import useTaskStore from '../store/taskStore';
+import useAppStore from '../../../store/appStore';
 
-export default function postTask({
-  appSetting,
-  subject,
-  resultList,
-  clearResultList,
-  setAppStep,
-}: {
-  appSetting: AppSetting;
-  subject: Subject;
-  resultList: Result[];
-  clearResultList: () => void;
-  setAppStep: React.Dispatch<React.SetStateAction<AppStep>>;
-}) {
+export default function ExportResult() {
+  const subject = useAppStore((state) => state.subject);
+  const taskSetting = useTaskStore((state) => state.taskSetting);
+  const setTaskStep = useTaskStore((state) => state.setTaskStep);
+  const resultList = useTaskStore((state) => state.resultList);
+  const clearResultList = useTaskStore((state) => state.clearResult);
   useEffect(() => {
     clearResultList();
   }, []);
@@ -28,19 +21,20 @@ export default function postTask({
       {resultList.length > 0 && (
         <CSVDownload
           data={resultList.map((result) => ({
-            name: subject.subjectLabel,
+            name: subject.label,
             date: subject.date.toLocaleString(),
-            initializeTime: appSetting.initializeTime,
-            sessionChangeTime: appSetting.sessionChangeTime,
+            initializeTime: taskSetting.initializeTime,
             ...result,
             sessionIndex: result.sessionIndex + 1,
-            taskIndex: result.taskIndex + 1,
+            taskIndex: result.index + 1,
             diff: result.submittedAnswer - result.value,
           }))}
           target="_blank"
         />
       )}
-      <Button label="메인으로 돌아가기" onClick={() => setAppStep('home')} />
+      <button type="button" onClick={() => setTaskStep('home')}>
+        Home
+      </button>
     </div>
   );
 }

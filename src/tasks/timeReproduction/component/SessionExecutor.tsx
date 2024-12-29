@@ -1,34 +1,30 @@
 import { useEffect, useRef, useState } from 'react';
-import { Session, Result } from '../lib/type';
+import useSessionStore from '../store/sessionStore';
+import useTaskStore from '../store/taskStore';
 
 const SQUARE_SIZE = 30;
 
-export default function taskBox({
-  session,
-  waitTime,
-  setIsFinished,
-  addResult,
-}: {
-  session: Session;
-  waitTime: number;
-  setIsFinished: (isFinished: boolean) => void;
-  addResult: (result: Result) => void;
-}) {
+export default function SessionExecutor() {
+  const sessionList = useSessionStore((state) => state.sessionList);
+  const sessionIndex = useSessionStore((state) => state.sessionIndex);
+  const setSessionState = useSessionStore((state) => state.setSessionState);
+  const taskSetting = useTaskStore((state) => state.taskSetting);
+  const addResult = useTaskStore((state) => state.addResult);
+
   const [index, setIndex] = useState<number>(0);
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isActive, setIsActive] = useState<boolean>(false);
   const initialTimeRef = useRef<number>(window.performance.now());
   const visibleTimer = useRef<number>();
-  const { sessionIndex, taskList } = session;
+  const { taskList } = sessionList[sessionIndex];
 
   const appendResult = () => {
-    const result: Result = {
-      sessionIndex,
-      taskIndex: index,
+    addResult({
+      sessionIndex: sessionIndex + 1,
+      index: index + 1,
       value: taskList[index],
       submittedAnswer: window.performance.now() - initialTimeRef.current,
-    };
-    addResult(result);
+    });
   };
 
   const handleStart = () => {
@@ -45,7 +41,7 @@ export default function taskBox({
 
   useEffect(() => {
     if (index >= taskList.length) {
-      setIsFinished(true);
+      setSessionState('end');
       return undefined;
     }
 
@@ -55,7 +51,7 @@ export default function taskBox({
         setIsVisible(false);
         setIsActive(true);
       }, taskList[index]);
-    }, waitTime);
+    }, taskSetting.waitTime);
 
     return () => window.clearTimeout(visibleTimer.current);
   }, [index]);
@@ -79,7 +75,7 @@ export default function taskBox({
 
       {isActive && (
         <button
-          className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600"
+          className="px-4 py-2 text-white bg-gray-500 rounded hover:bg-gray-600"
           type="button"
           onClick={isVisible ? handleEnd : handleStart}
         >

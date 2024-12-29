@@ -1,36 +1,24 @@
-export type AppStep =
+export type TaskStep =
   | 'home'
   | 'setting'
-  | 'setup'
-  | 'stand-by'
-  | 'explain'
-  | 'trial'
-  | 'pre-task'
+  | 'subject-setup'
   | 'task'
-  | 'post-task';
+  | 'export-result';
 
 export interface Session {
   id: string;
-  sessionIndex: number;
   taskList: number[]; // ms
+  previewImgLinkList: string[];
 }
 
-export interface AppSetting {
+export interface TaskSetting {
   initializeTime: number; // ms
-  sessionChangeTime: number; // ms
   waitTime: number; // ms
-  trialSession: Session;
-  sessionList: Session[];
 }
 
 export interface Result {
   sessionIndex: number;
-  taskIndex: number;
+  index: number;
   value: number;
   submittedAnswer: number;
-}
-
-export interface Subject {
-  subjectLabel: string; // anything
-  date: Date;
 }

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Button from '../component/button';
 import Modal from '../component/modal';
 import useTaskStore from '../store/taskStore';
 import useSessionStore from '../store/sessionStore';
@@ -31,8 +30,8 @@ export default function Home() {
       <div className="flex flex-col items-center justify-center space-y-4">
         <h1 className="text-3xl font-bold text-center">N back Task</h1>
         <div className="flex space-x-4">
-          <Button
-            label="Start"
+          <button
+            type="button"
             onClick={() => {
               if (isReady()) {
                 setTaskStep('subject-setup');
@@ -40,9 +39,15 @@ export default function Home() {
                 setIsModelOpen(true);
               }
             }}
-          />
-          <Button label="Setting" onClick={() => setTaskStep('setting')} />
-          <Button label="Select Task" onClick={() => setTask('none')} />
+          >
+            Start
+          </button>
+          <button type="button" onClick={() => setTaskStep('setting')}>
+            Setting
+          </button>
+          <button type="button" onClick={() => setTask('none')}>
+            Select Task
+          </button>
         </div>
       </div>
     </>

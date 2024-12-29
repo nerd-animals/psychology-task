@@ -1,5 +1,4 @@
 import React, { ChangeEvent, useRef } from 'react';
-import Button from '../component/button';
 import useTaskStore from '../store/taskStore';
 import useAppStore from '../../../store/appStore';
 
@@ -31,13 +30,15 @@ export default function SubjectSetup() {
           }}
         />
       </div>
-      <Button
-        label="설정 완료"
+      <button
+        type="button"
         onClick={() => {
           initializeSubject();
           setTaskStep('task');
         }}
-      />
+      >
+        설정 완료
+      </button>
     </div>
   );
 }

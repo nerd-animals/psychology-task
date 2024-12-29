@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { CSVDownload } from 'react-csv';
-import Button from '../component/button';
 import useTaskStore from '../store/taskStore';
 import useAppStore from '../../../store/appStore';
 
@@ -35,7 +34,9 @@ export default function ExportResult() {
           target="_blank"
         />
       )}
-      <Button label="메인으로 돌아가기" onClick={() => setTaskStep('home')} />
+      <button type="button" onClick={() => setTaskStep('home')}>
+        Home
+      </button>
     </div>
   );
 }

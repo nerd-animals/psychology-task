@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
-import Button from '../component/button';
-import Modal from '../component/modal';
+import Modal from '../../../component/Modal';
 import useTaskStore from '../store/taskStore';
+import useSessionStore from '../store/sessionStore';
+import useAppStore from '../../../store/appStore';
 
 export default function Home() {
-  const taskSetting = useTaskStore((state) => state.taskSetting);
+  const setTask = useAppStore((state) => state.setTask);
+  const sessionList = useSessionStore((state) => state.sessionList);
   const setTaskStep = useTaskStore((state) => state.setTaskStep);
 
   const [isModalOpen, setIsModelOpen] = useState<boolean>(false);
   const isReady = () => {
-    if (taskSetting.sessionList.length === 0) return false;
-    if (
-      taskSetting.sessionList.some((session) => session.taskList.length === 0)
-    )
+    if (sessionList.length === 0) return false;
+    if (sessionList.some((session) => session.taskList.length === 0))
       return false;
     return true;
   };
@@ -30,8 +30,8 @@ export default function Home() {
       <div className="flex flex-col items-center justify-center space-y-4">
         <h1 className="text-3xl font-bold text-center">N back Task</h1>
         <div className="flex space-x-4">
-          <Button
-            label="Start"
+          <button
+            type="button"
             onClick={() => {
               if (isReady()) {
                 setTaskStep('subject-setup');
@@ -39,8 +39,15 @@ export default function Home() {
                 setIsModelOpen(true);
               }
             }}
-          />
-          <Button label="Setting" onClick={() => setTaskStep('setting')} />
+          >
+            Start
+          </button>
+          <button type="button" onClick={() => setTaskStep('setting')}>
+            Setting
+          </button>
+          <button type="button" onClick={() => setTask('none')}>
+            Select Task
+          </button>
         </div>
       </div>
     </>

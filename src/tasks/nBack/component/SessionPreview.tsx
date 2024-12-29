@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react';
 import useSessionStore from '../store/sessionStore';
-import useTaskStore from '../store/taskStore';
-import GoogleDriveImage from './GoogleDriveImage';
+import GoogleDriveImage from '../../../component/GoogleDriveImage';
 
 export default function SessionPreview() {
   const [index, setIndex] = useState<number>(0);
   const setSessionState = useSessionStore((state) => state.setSessionState);
   const sessionIndex = useSessionStore((state) => state.sessionIndex);
-  const sessionList = useTaskStore((state) => state.taskSetting.sessionList);
+  const sessionList = useSessionStore((state) => state.sessionList);
   const { previewImgLinkList } = sessionList[sessionIndex];
 
   const prevButton = () => (

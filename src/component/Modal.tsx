@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom';
 
-export default function modal({
+export default function Modal({
   isOpen,
   onClose,
   title,
@@ -15,13 +15,13 @@ export default function modal({
 
   return ReactDOM.createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-6 rounded shadow-lg max-w-sm w-full">
-        <h2 className="text-xl font-semibold mb-4">{title}</h2>
+      <div className="w-full max-w-sm p-6 bg-white rounded shadow-lg">
+        <h2 className="mb-4 text-xl font-semibold">{title}</h2>
         <p className="mb-4">{message}</p>
         <button
           type="button"
           onClick={onClose}
-          className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
+          className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
         >
           닫기
         </button>

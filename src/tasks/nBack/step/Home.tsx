@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Modal from '../../../component/modal';
+import Modal from '../../../component/Modal';
 import useTaskStore from '../store/taskStore';
 import useSessionStore from '../store/sessionStore';
 import useAppStore from '../../../store/appStore';

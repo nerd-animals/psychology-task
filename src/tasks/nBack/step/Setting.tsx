@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from 'react';
 import { v4 as uuid } from 'uuid';
-import { Session } from '../lib/type';
+import { BgColorType, Session } from '../lib/type';
 import useTaskStore from '../store/taskStore';
 import useSessionStore from '../store/sessionStore';
 
@@ -15,6 +15,11 @@ export default function Setting() {
   const setTaskSetting = useTaskStore((state) => state.setTaskSetting);
   const setTaskStep = useTaskStore((state) => state.setTaskStep);
 
+  const nextBgColorType = (bgColorType: BgColorType): BgColorType => {
+    if (bgColorType === 'Gray') return 'Red-Green';
+    if (bgColorType === 'None') return 'Gray';
+    return 'None';
+  };
   return (
     <div className="w-full max-w-md space-y-4">
       <div className="flex justify-between">
@@ -188,17 +193,18 @@ export default function Setting() {
             />
           </div>
           <div className="grid grid-cols-2 space-x-2">
-            <div>Show background color</div>
-            <input
-              type="checkbox"
-              defaultChecked={session.showBgColor}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            <div>Background Color Type</div>
+            <button
+              type="button"
+              onClick={() => {
                 updateSession(index, {
                   ...session,
-                  showBgColor: event.target.checked,
+                  bgColorType: nextBgColorType(session.bgColorType),
                 });
               }}
-            />
+            >
+              {session.bgColorType}
+            </button>
           </div>
         </div>
       ))}

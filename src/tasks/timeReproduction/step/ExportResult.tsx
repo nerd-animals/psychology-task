@@ -23,12 +23,9 @@ export default function ExportResult() {
           data={resultList.map((result) => ({
             name: subject.label,
             date: subject.date.toLocaleString(),
-            'back count': taskSetting.backCount,
-            'Inter-Session Interval (ms)': taskSetting.initializeTime,
-            'Stimulus Duration (ms)': taskSetting.visibleTime,
             'Inter-Stimulus Interval (ms)': taskSetting.waitTime,
             ...result,
-            score: result.solution === result.submittedAnswer ? 1 : 0,
+            diff: result.submittedAnswer - result.value,
           }))}
           target="_blank"
         />

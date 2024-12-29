@@ -2,11 +2,8 @@ import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { TaskStep, TaskSetting, Result } from '../lib/type';
 
-const INITIAL_APP_SETTING: TaskSetting = {
-  backCount: 3,
-  initializeTime: 3000,
-  visibleTime: 500,
-  waitTime: 2000,
+const INITIAL_TASK_SETTING: TaskSetting = {
+  waitTime: 3000,
 };
 
 interface State {
@@ -25,10 +22,10 @@ interface Actions {
 const useTaskStore = create<State & Actions>()(
   immer((set) => ({
     taskStep: 'home',
-    taskSetting: INITIAL_APP_SETTING,
+    taskSetting: INITIAL_TASK_SETTING,
     resultList: [],
-    setTaskStep: (step) => set({ taskStep: step }),
-    setTaskSetting: (setting) => set({ taskSetting: setting }),
+    setTaskStep: (taskStep) => set({ taskStep }),
+    setTaskSetting: (taskSetting) => set({ taskSetting }),
     addResult: (result) =>
       set((state) => {
         state.resultList.push(result);

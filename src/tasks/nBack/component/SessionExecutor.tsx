@@ -42,7 +42,7 @@ export default function SessionExecutor() {
   const durationRef = useRef<number>(-1);
   const visibleTimer = useRef<number>();
 
-  const { taskList, showBgColor, showBackCountToast, showButtonClicked } =
+  const { taskList, bgColorType, showBackCountToast, showButtonClicked } =
     sessionList[sessionIndex];
   const solutionList = solve(taskSetting.backCount, taskList);
 
@@ -61,10 +61,13 @@ export default function SessionExecutor() {
   };
 
   const displayResult = () => {
+    if (bgColorType === 'None') {
+      return;
+    }
     if (submittedAnswerRef.current === solutionList[index]) {
-      setColor(showBgColor ? 'bg-green-400' : 'bg-gray-400');
+      setColor(bgColorType === 'Gray' ? 'bg-gray-200' : 'bg-green-400');
     } else {
-      setColor(showBgColor ? 'bg-red-400' : 'bg-gray-400');
+      setColor(bgColorType === 'Gray' ? 'bg-gray-200' : 'bg-red-400');
     }
   };
 
@@ -135,7 +138,7 @@ export default function SessionExecutor() {
 
   return (
     <div
-      className={`w-full min-h-screen flex items-center justify-center ${color}`}
+      className={`w-full min-h-screen flex items-center justify-center ${color} cursor-none`}
     >
       {displaySubmissionStatus && <div>응답하지 않았습니다.</div>}
       {displaySubmissionStatus === false && (

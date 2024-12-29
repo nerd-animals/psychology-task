@@ -24,46 +24,21 @@ const useSessionStore = create<State & Actions>()(
     sessionList: [
       {
         id: uuid(),
-        taskList: [4, 1, 5, 4, 1, 4, 5, 2, 4, 1, 1, 4],
+        taskList: [4000, 10000, 18000],
         previewImgLinkList: [
-          '1WOMx7M4cMKgtO_h6owG9bKOvwbgKZzB4',
-          '1vQbqR-EE4-IQ-08HpiR96zTSUbn9RUSU',
-          '17ht4mt5g0BztuWfx85lcpdccNASO7wTt',
-          '1SODSaRDBhcc_fdhXMfsCsBEVVwOA_YiX',
+          '13GvITJPb488tgxuo618SKAgVZU0_mv-b',
+          '1-g20TCN3LZ2jvqFb_luGYc2gmbMs0Pvk',
         ],
-        showButtonClicked: true,
-        showBackCountToast: true,
-        bgColorType: 'Red-Green',
       },
       {
         id: uuid(),
-        taskList: [5, 5, 2, 4, 5, 2, 3, 4, 3, 3, 4, 4],
-        previewImgLinkList: ['10hdy3y-36cMBNhP5fSKh9hEnPVA--gPc'],
-        showButtonClicked: false,
-        showBackCountToast: false,
-        bgColorType: 'Gray',
+        taskList: [2000, 6000, 12000, 24000, 45000, 60000],
+        previewImgLinkList: ['1iR4eo3BzLsfODbbrJIsBnpTBjoyepPQI'],
       },
       {
         id: uuid(),
-        taskList: [
-          7, 2, 7, 7, 4, 2, 7, 1, 1, 7, 1, 4, 7, 6, 9, 2, 8, 6, 9, 8, 9, 9, 8,
-          7,
-        ],
-        previewImgLinkList: ['1pZ86FhHBEbrtigbXPe1QWxH7jcR1qCbU'],
-        showButtonClicked: false,
-        showBackCountToast: false,
-        bgColorType: 'Gray',
-      },
-      {
-        id: uuid(),
-        taskList: [
-          8, 6, 6, 8, 2, 6, 8, 5, 3, 8, 7, 4, 9, 7, 1, 9, 6, 5, 9, 4, 3, 9, 5,
-          1,
-        ],
+        taskList: [6000, 24000, 60000, 2000, 12000, 45000],
         previewImgLinkList: ['1QguQI4MWE1pQcrUmttzK7oYIQdWU8biN'],
-        showButtonClicked: false,
-        showBackCountToast: false,
-        bgColorType: 'Gray',
       },
     ],
     sessionState: 'start',
@@ -74,9 +49,6 @@ const useSessionStore = create<State & Actions>()(
           id: uuid(),
           taskList: [],
           previewImgLinkList: [],
-          showButtonClicked: false,
-          showBackCountToast: false,
-          bgColorType: 'Gray',
         });
       }),
     updateSession: (idx, session) => {
@@ -93,4 +65,5 @@ const useSessionStore = create<State & Actions>()(
     setSessionIndex: (sessionIndex) => set({ sessionIndex }),
   }))
 );
+
 export default useSessionStore;

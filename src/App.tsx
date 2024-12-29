@@ -16,14 +16,14 @@ function App() {
             type="button"
             onClick={() => setTask('n-back')}
           >
-            n-back
+            N Back
           </button>
           <button
             className="px-2 py-1 text-white bg-gray-500 rounded-lg hover:bg-gray-600"
             type="button"
             onClick={() => setTask('time-reproduction')}
           >
-            time-reproduction
+            Time Reproduction
           </button>
         </div>
       )}

@@ -9,13 +9,14 @@ export type TaskStep =
   | 'task'
   | 'export-result';
 
+export type BgColorType = 'None' | 'Red-Green' | 'Gray';
 export interface Session {
   id: string;
   taskList: number[];
   previewImgLinkList: string[];
   showButtonClicked: boolean;
   showBackCountToast: boolean;
-  showBgColor: boolean;
+  bgColorType: BgColorType;
 }
 
 export interface TaskSetting {

@@ -4,9 +4,7 @@ import useTaskStore from '../store/taskStore';
 
 export default function SessionStandby() {
   const setSessionState = useSessionStore((state) => state.setSessionState);
-  const initializeTime = useTaskStore(
-    (state) => state.taskSetting.initializeTime
-  );
+  const initializeTime = useTaskStore((state) => state.taskSetting.waitTime);
   const standbyTimer = useRef<number>();
 
   useEffect(() => {
@@ -17,7 +15,5 @@ export default function SessionStandby() {
     return () => window.clearTimeout(standbyTimer.current);
   }, []);
 
-  return (
-    <div className="cursor-none">잠시 후, 시작됩니다. 화면을 집중해주세요!</div>
-  );
+  return <>잠시 후, 시작됩니다. 화면을 집중해주세요!</>;
 }

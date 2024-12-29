@@ -28,7 +28,9 @@ export default function Home() {
         message="연습 문제와 본 문제가 설정되어야 시작할 수 있습니다."
       />
       <div className="flex flex-col items-center justify-center space-y-4">
-        <h1 className="text-3xl font-bold text-center">N back Task</h1>
+        <h1 className="text-3xl font-bold text-center">
+          Time Reproduction Task
+        </h1>
         <div className="flex space-x-4">
           <button
             type="button"

@@ -1,10 +1,8 @@
 import React, { ChangeEvent } from 'react';
 import { v4 as uuid } from 'uuid';
-import { BgColorType, Session } from '../lib/type';
+import { Session } from '../lib/type';
 import useTaskStore from '../store/taskStore';
 import useSessionStore from '../store/sessionStore';
-
-const VALID_BACK_COUNT = [2, 3, 4];
 
 export default function Setting() {
   const taskSetting = useTaskStore((state) => state.taskSetting);
@@ -15,11 +13,6 @@ export default function Setting() {
   const setTaskSetting = useTaskStore((state) => state.setTaskSetting);
   const setTaskStep = useTaskStore((state) => state.setTaskStep);
 
-  const nextBgColorType = (bgColorType: BgColorType): BgColorType => {
-    if (bgColorType === 'Gray') return 'Red-Green';
-    if (bgColorType === 'None') return 'Gray';
-    return 'None';
-  };
   return (
     <div className="w-full max-w-md space-y-4">
       <div className="flex justify-between">
@@ -32,43 +25,6 @@ export default function Setting() {
         </button>
       </div>
       <h2 className="text-xl font-bold">Task Setting</h2>
-      <div className="grid grid-cols-2 space-x-2">
-        <div>Back Count</div>
-        <input
-          type="number"
-          value={taskSetting.backCount}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            const value = e.target.valueAsNumber || 0;
-            if (VALID_BACK_COUNT.includes(value)) {
-              setTaskSetting({ ...taskSetting, backCount: value });
-            } else {
-              // alert
-            }
-          }}
-        />
-      </div>
-      <div className="grid grid-cols-2 space-x-2">
-        <div>Inter-Session Interval (ms)</div>
-        <input
-          type="number"
-          value={taskSetting.initializeTime}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            const value = e.target.valueAsNumber || 0;
-            setTaskSetting({ ...taskSetting, initializeTime: value });
-          }}
-        />
-      </div>
-      <div className="grid grid-cols-2 space-x-2">
-        <div>Stimulus Duration (ms)</div>
-        <input
-          type="number"
-          value={taskSetting.visibleTime}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            const value = e.target.valueAsNumber || 0;
-            setTaskSetting({ ...taskSetting, visibleTime: value });
-          }}
-        />
-      </div>
       <div className="grid grid-cols-2 space-x-2">
         <div>Inter-Stimulus Interval (ms)</div>
         <input
@@ -90,7 +46,6 @@ export default function Setting() {
           +
         </button>
       </div>
-
       {sessionList.map((session: Session, index) => (
         <div key={session.id}>
           <div className="grid grid-cols-4 ">
@@ -165,46 +120,6 @@ export default function Setting() {
                 </div>
               ))}
             </div>
-          </div>
-          <div className="grid grid-cols-2 space-x-2">
-            <div>Show Button Clicked</div>
-            <input
-              type="checkbox"
-              defaultChecked={session.showButtonClicked}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                updateSession(index, {
-                  ...session,
-                  showButtonClicked: event.target.checked,
-                });
-              }}
-            />
-          </div>
-          <div className="grid grid-cols-2 space-x-2">
-            <div>Show Toast</div>
-            <input
-              type="checkbox"
-              defaultChecked={session.showBackCountToast}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                updateSession(index, {
-                  ...session,
-                  showBackCountToast: event.target.checked,
-                });
-              }}
-            />
-          </div>
-          <div className="grid grid-cols-2 space-x-2">
-            <div>Background Color Type</div>
-            <button
-              type="button"
-              onClick={() => {
-                updateSession(index, {
-                  ...session,
-                  bgColorType: nextBgColorType(session.bgColorType),
-                });
-              }}
-            >
-              {session.bgColorType}
-            </button>
           </div>
         </div>
       ))}

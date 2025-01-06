@@ -65,9 +65,9 @@ export default function SessionExecutor() {
       return;
     }
     if (submittedAnswerRef.current === solutionList[index]) {
-      setColor(bgColorType === 'Gray' ? 'bg-gray-200' : 'bg-green-400');
+      setColor(bgColorType === 'Gray' ? 'bg-gray-200' : 'bg-green-300');
     } else {
-      setColor(bgColorType === 'Gray' ? 'bg-gray-200' : 'bg-red-400');
+      setColor(bgColorType === 'Gray' ? 'bg-gray-200' : 'bg-red-300');
     }
   };
 

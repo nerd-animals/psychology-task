@@ -26,19 +26,23 @@ const useSessionStore = create<State & Actions>()(
         id: uuid(),
         taskList: [4000, 10000, 18000],
         previewImgLinkList: [
-          '13GvITJPb488tgxuo618SKAgVZU0_mv-b',
-          '1-g20TCN3LZ2jvqFb_luGYc2gmbMs0Pvk',
+          `${process.env.PUBLIC_URL}/images/tasks/timeReproduction/timeReproduction-0.png`,
+          `${process.env.PUBLIC_URL}/images/tasks/timeReproduction/timeReproduction-1.png`,
         ],
       },
       {
         id: uuid(),
         taskList: [2000, 6000, 12000, 24000, 45000, 60000],
-        previewImgLinkList: ['1iR4eo3BzLsfODbbrJIsBnpTBjoyepPQI'],
+        previewImgLinkList: [
+          `${process.env.PUBLIC_URL}/images/tasks/timeReproduction/timeReproduction-inter-0.png`,
+        ],
       },
       {
         id: uuid(),
         taskList: [6000, 24000, 60000, 2000, 12000, 45000],
-        previewImgLinkList: ['1QguQI4MWE1pQcrUmttzK7oYIQdWU8biN'],
+        previewImgLinkList: [
+          `${process.env.PUBLIC_URL}/images/tasks/timeReproduction/timeReproduction-inter-1.png`,
+        ],
       },
     ],
     sessionState: 'start',

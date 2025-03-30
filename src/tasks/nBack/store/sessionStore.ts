@@ -24,12 +24,12 @@ const useSessionStore = create<State & Actions>()(
     sessionList: [
       {
         id: uuid(),
-        taskList: [4, 1, 5, 4, 1, 4, 5, 2, 4, 1, 1, 4],
+        taskList: [4, 1, 5, 4, 1, 4, 5, 2, 4, 1, 1, 4, 2, 1, 2],
         previewImgLinkList: [
-          '1WOMx7M4cMKgtO_h6owG9bKOvwbgKZzB4',
-          '1vQbqR-EE4-IQ-08HpiR96zTSUbn9RUSU',
-          '17ht4mt5g0BztuWfx85lcpdccNASO7wTt',
-          '1SODSaRDBhcc_fdhXMfsCsBEVVwOA_YiX',
+          `${process.env.PUBLIC_URL}/images/tasks/nBack/nBack-0.png`,
+          `${process.env.PUBLIC_URL}/images/tasks/nBack/nBack-1.png`,
+          `${process.env.PUBLIC_URL}/images/tasks/nBack/nBack-2.png`,
+          `${process.env.PUBLIC_URL}/images/tasks/nBack/nBack-3.png`,
         ],
         showButtonClicked: true,
         showBackCountToast: true,
@@ -37,8 +37,10 @@ const useSessionStore = create<State & Actions>()(
       },
       {
         id: uuid(),
-        taskList: [5, 5, 2, 4, 5, 2, 3, 4, 3, 3, 4, 4],
-        previewImgLinkList: ['10hdy3y-36cMBNhP5fSKh9hEnPVA--gPc'],
+        taskList: [5, 5, 2, 4, 5, 2, 3, 4, 3, 3, 4, 5, 4, 3, 5],
+        previewImgLinkList: [
+          `${process.env.PUBLIC_URL}/images/tasks/nBack/nBack-inter-0.png`,
+        ],
         showButtonClicked: false,
         showBackCountToast: false,
         bgColorType: 'Gray',
@@ -46,21 +48,13 @@ const useSessionStore = create<State & Actions>()(
       {
         id: uuid(),
         taskList: [
-          7, 2, 7, 7, 4, 2, 7, 1, 1, 7, 1, 4, 7, 6, 9, 2, 8, 6, 9, 8, 9, 9, 8,
-          7,
+          4, 3, 4, 2, 8, 4, 8, 4, 4, 3, 4, 2, 3, 2, 4, 3, 8, 4, 8, 2, 4, 3, 2,
+          8, 2, 7, 6, 2, 7, 3, 2, 8, 2, 2, 4, 8, 2, 2, 7, 8, 4, 7, 4, 6, 7, 6,
+          4, 8, 7, 8,
         ],
-        previewImgLinkList: ['1pZ86FhHBEbrtigbXPe1QWxH7jcR1qCbU'],
-        showButtonClicked: false,
-        showBackCountToast: false,
-        bgColorType: 'Gray',
-      },
-      {
-        id: uuid(),
-        taskList: [
-          8, 6, 6, 8, 2, 6, 8, 5, 3, 8, 7, 4, 9, 7, 1, 9, 6, 5, 9, 4, 3, 9, 5,
-          1,
+        previewImgLinkList: [
+          `${process.env.PUBLIC_URL}/images/tasks/nBack/nBack-inter-1.png`,
         ],
-        previewImgLinkList: ['1QguQI4MWE1pQcrUmttzK7oYIQdWU8biN'],
         showButtonClicked: false,
         showBackCountToast: false,
         bgColorType: 'Gray',

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import useSessionStore from '../store/sessionStore';
-import GoogleDriveImage from '../../../component/GoogleDriveImage';
 
 export default function SessionPreview() {
   const [index, setIndex] = useState<number>(0);
@@ -52,7 +51,7 @@ export default function SessionPreview() {
     <div className="flex flex-col justify-between w-full h-full">
       {/* 중간 설명 영역 (스크롤 가능) */}
       <div className="flex flex-col items-center flex-grow px-4 my-4 overflow-y-auto text-center">
-        {GoogleDriveImage(previewImgLinkList[index], 'image')}
+        <img src={previewImgLinkList[index]} alt="" />
       </div>
 
       {/* 하단 좌우 버튼 */}

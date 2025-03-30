@@ -1,5 +1,4 @@
 import React, { ChangeEvent } from 'react';
-import { v4 as uuid } from 'uuid';
 import { Session } from '../lib/type';
 import useTaskStore from '../store/taskStore';
 import useSessionStore from '../store/sessionStore';
@@ -7,9 +6,7 @@ import useSessionStore from '../store/sessionStore';
 export default function Setting() {
   const taskSetting = useTaskStore((state) => state.taskSetting);
   const sessionList = useSessionStore((state) => state.sessionList);
-  const addSession = useSessionStore((state) => state.addSession);
   const updateSession = useSessionStore((state) => state.updateSession);
-  const removeSession = useSessionStore((state) => state.removeSession);
   const setTaskSetting = useTaskStore((state) => state.setTaskSetting);
   const setTaskStep = useTaskStore((state) => state.setTaskStep);
 

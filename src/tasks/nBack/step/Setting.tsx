@@ -33,21 +33,6 @@ export default function Setting() {
       </div>
       <h2 className="text-xl font-bold">Task Setting</h2>
       <div className="grid grid-cols-2 space-x-2">
-        <div>Back Count</div>
-        <input
-          type="number"
-          value={taskSetting.backCount}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            const value = e.target.valueAsNumber || 0;
-            if (VALID_BACK_COUNT.includes(value)) {
-              setTaskSetting({ ...taskSetting, backCount: value });
-            } else {
-              // alert
-            }
-          }}
-        />
-      </div>
-      <div className="grid grid-cols-2 space-x-2">
         <div>Inter-Session Interval (ms)</div>
         <input
           type="number"
@@ -82,22 +67,12 @@ export default function Setting() {
       </div>
       <div className="grid grid-cols-2">
         <h2 className="text-xl font-bold">Session Setting</h2>
-        <button
-          type="button"
-          className="flex items-center justify-center w-8 h-8"
-          onClick={() => addSession()}
-        >
-          +
-        </button>
       </div>
 
       {sessionList.map((session: Session, index) => (
         <div key={session.id}>
           <div className="grid grid-cols-4 ">
             <div className="bg-gray-300 rounded">{`${index + 1}번째 session`}</div>
-            <button type="button" onClick={() => removeSession(index)}>
-              -
-            </button>
           </div>
 
           <div className="grid grid-cols-2 space-x-2">
@@ -117,54 +92,6 @@ export default function Setting() {
                 });
               }}
             />
-          </div>
-          <div className="grid grid-cols-2 space-x-2">
-            <div>Preview Image Link</div>
-            <button
-              type="button"
-              className="flex items-center justify-center w-8 h-8"
-              onClick={() => {
-                updateSession(index, {
-                  ...session,
-                  previewImgLinkList: [...session.previewImgLinkList, ''],
-                });
-              }}
-            >
-              +
-            </button>
-            <div>
-              {session.previewImgLinkList.map((link, i: number) => (
-                <div className="flex" key={uuid()}>
-                  <input
-                    type="string"
-                    className="overflow-x-auto"
-                    defaultValue={link}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                      const buf = [...session.previewImgLinkList];
-                      buf.splice(i, 1, e.target.value);
-                      updateSession(index, {
-                        ...session,
-                        previewImgLinkList: buf,
-                      });
-                    }}
-                  />
-                  <button
-                    type="button"
-                    className="flex items-center justify-center w-8 h-8"
-                    onClick={() => {
-                      const buf = [...session.previewImgLinkList];
-                      buf.splice(i, 1);
-                      updateSession(index, {
-                        ...session,
-                        previewImgLinkList: buf,
-                      });
-                    }}
-                  >
-                    -
-                  </button>
-                </div>
-              ))}
-            </div>
           </div>
           <div className="grid grid-cols-2 space-x-2">
             <div>Show Button Clicked</div>
